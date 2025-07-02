@@ -8,35 +8,34 @@
 #include <iostream>
 #include <cstring>
 #include <cstdio>
+#include <poll.h>
+#include <vector>
 
 int main() {
-    int server_fd, client_fd;
-    struct sockaddr_in server_addr, client_addr;
-    socklen_t client_addr_len = sizeof(client_addr);
-    char buffer[1024];
-    int port = 6667; // Default IRC port
+    int server_fd;
+    struct sockaddr_in server_addr;
+    int port = 6667;
 
-    // Create the server socket
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd < 0) {
         perror("socket");
         return 1;
     }
 
-    // Set up the server address struct
-    memset(&server_addr, 0, sizeof(server_addr));
-    server_addr.sin_family = AF_INET; // Set the address family to IPv4
-    server_addr.sin_addr.s_addr = INADDR_ANY; // Bind to all available interfaces
-    server_addr.sin_port = htons(port); // Convert the port to network byte order
+    int opt = 1;
+    setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
-    // Bind the socket to the address and port
+    memset(&server_addr, 0, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_addr.s_addr = INADDR_ANY;
+    server_addr.sin_port = htons(port);
+
     if (bind(server_fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
         perror("bind");
         close(server_fd);
         return 1;
     }
 
-    // Listen for incoming connections
     if (listen(server_fd, 5) < 0) {
         perror("listen");
         close(server_fd);
@@ -45,31 +44,67 @@ int main() {
 
     std::cout << "Server listening on port " << port << std::endl;
 
-    // Accept a connection
-    client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_addr_len);
-    if (client_fd < 0) {
-        perror("accept");
-        close(server_fd);
-        return 1;
+    // Vector de pollfd: el primero es el socket servidor
+    std::vector<struct pollfd> fds;
+    struct pollfd server_pollfd;
+    server_pollfd.fd = server_fd;
+    server_pollfd.events = POLLIN;
+    server_pollfd.revents = 0;
+    fds.push_back(server_pollfd);
+
+    char buffer[1024];
+
+    while (true) {
+        int ret = poll(&fds[0], fds.size(), -1);
+        if (ret < 0) {
+            perror("poll");
+            break;
+        }
+
+        // Revisar todos los fds
+        for (size_t i = 0; i < fds.size(); ++i) {
+            if (fds[i].revents & POLLIN) {
+                if (fds[i].fd == server_fd) {
+                    // Nuevo cliente conectado
+                    struct sockaddr_in client_addr;
+                    socklen_t client_len = sizeof(client_addr);
+                    int client_fd = accept(server_fd, (struct sockaddr *)&client_addr, &client_len);
+                    if (client_fd < 0) {
+                        perror("accept");
+                        continue;
+                    }
+                    std::cout << "New client connected: fd " << client_fd << std::endl;
+
+                    struct pollfd client_pollfd;
+                    client_pollfd.fd = client_fd;
+                    client_pollfd.events = POLLIN;
+                    client_pollfd.revents = 0;
+                    fds.push_back(client_pollfd);
+                } else {
+                    // Cliente ya conectado envió datos
+                    ssize_t bytes_read = recv(fds[i].fd, buffer, sizeof(buffer) - 1, 0);
+                    if (bytes_read < 0) {
+                        perror("recv");
+                        close(fds[i].fd);
+                        fds.erase(fds.begin() + i);
+                        --i;
+                    } else if (bytes_read == 0) {
+                        std::cout << "Client disconnected: fd " << fds[i].fd << std::endl;
+                        close(fds[i].fd);
+                        fds.erase(fds.begin() + i);
+                        --i;
+                    } else {
+                        buffer[bytes_read] = '\0';
+                        std::cout << "Received from fd " << fds[i].fd << ": " << buffer << std::endl;
+                    }
+                }
+            }
+        }
     }
 
-    std::cout << "Client connected" << std::endl;
-
-    // Read data from the client
-    ssize_t bytes_read = read(client_fd, buffer, sizeof(buffer) - 1);
-    if (bytes_read < 0) {
-        perror("read");
-        close(client_fd);
-        close(server_fd);
-        return 1;
+    for (size_t i = 0; i < fds.size(); ++i) {
+        close(fds[i].fd);
     }
-
-    buffer[bytes_read] = '\0'; // Null-terminate the buffer
-    std::cout << "Received message: " << buffer << std::endl;
-
-    // Close the client and server sockets
-    close(client_fd);
-    close(server_fd);
 
     return 0;
 }
