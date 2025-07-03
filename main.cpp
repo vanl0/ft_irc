@@ -1,5 +1,6 @@
 #include "Channel.hpp"
 #include "Client.hpp"
+#include "Server.hpp"
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -67,7 +68,7 @@ int main() {
     server_pollfd.revents = 0; // init the flag that indicates if events (POLLIN) is true
     fds.push_back(server_pollfd);
 
-    char buffer[1024];
+    char buffer[1024]; //buffer to store data recieved
 
     while (true) {
         int ret = poll(&fds[0], fds.size(), -1); //poll will wait till some event occurs
