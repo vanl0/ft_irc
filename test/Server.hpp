@@ -1,7 +1,3 @@
-
-#ifndef SERVER_HPP
-# define SERVER_HPP
-
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -11,8 +7,6 @@
 #include <cstdio>
 #include <poll.h>
 #include <vector>
-#include <fcntl.h>
-#include "Client.hpp"
 
 class	Server{
 
@@ -22,30 +16,17 @@ private:
 	struct sockaddr_in			_server_addr;
 	struct pollfd				_server_pollfd;
 	std::vector<struct pollfd>	_fds;
-
 	char						_buffer[1024];
-	static bool					_signal;
 
-	std::vector<Client>			_clients;
-
+	bool						_running;
 	void						_serverSocketInit(void);
-	void						_acceptNewClient(void);
-	void						_acceptClientInput(int clientFd);
-
-
 public:
 	Server(int const port);
 	~Server(void);
 
-	void	serverInit(void);
-
-	static void	handleSignal(int sign);
-	void	closeFds(void);
 	class ServerInitError : public std::exception {
 			public :
 					const char *	what (void) const throw();
 		};
-	void						_closeFds(void);
-};
 
-#endif
+};
