@@ -44,7 +44,7 @@ void Server::ReceiveNewData(int fd)
 
 	ssize_t bytes = recv(fd, buff, sizeof(buff) - 1 , 0); //-> receive the data
 
-	if(bytes <= 0)
+	if (bytes <= 0)
 	{ //-> check if the client disconnected
 		std::cout << RED << "Client <" << fd << "> Disconnected" << WHI << std::endl;
 		ClearClients(fd); //-> clear the client
@@ -87,6 +87,23 @@ void Server::AcceptNewClient()
 	std::cout << GRE << "Client <" << incofd << "> Connected" << WHI << std::endl;
 }
 
+void Server::ServerCommand()
+{
+	std::string line;
+	std::getline(std::cin, line);
+	if (line.empty())
+		return;
+
+	if (line == "exit") {
+		Server::Signal = true;
+		std::cout << "Shutting down server..." << std::endl;
+		return;
+	}
+	// need to add private message commands on server side
+
+	std::cout << "Unknown command: " << line << std::endl;
+}
+
 void Server::SerSocket()
 {
 	int en = 1;
@@ -120,6 +137,14 @@ void Server::ServerInit(int port, const std::string &pass)
 	this->Port = port;
     this->password = pass;
 	SerSocket(); //-> create the server socket
+	// add STDIN to the poll list for server commands
+	struct pollfd stdInPoll;
+	stdInPoll.fd = STDIN_FILENO;
+	stdInPoll.events = POLLIN;
+	stdInPoll.revents = 0;
+	if (fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK) == -1)
+		throw(std::runtime_error("failed to set option (O_NONBLOCK) on standard input"));
+	fds.push_back(stdInPoll);
 
 	std::cout << GRE << "IRC server <" << SerSocketFd << "> connected on port [" << this->Port << "]" << WHI << std::endl;
 	std::cout << "Waiting to accept a new connection...\n";
@@ -127,13 +152,15 @@ void Server::ServerInit(int port, const std::string &pass)
 	while (Server::Signal == false){ //-> run the server until the signal is received
 
 		if ((poll(&fds[0],fds.size(),-1) == -1) && Server::Signal == false) //-> wait for an event
-			throw(std::runtime_error("poll() failed"));
+			throw (std::runtime_error("poll() failed"));
 
 		for (size_t i = 0; i < fds.size(); i++)
 		{ //-> check all file descriptors
 			if (fds[i].revents & POLLIN)
 			{ //-> check if there is data to read
-				if (fds[i].fd == SerSocketFd)
+				if (fds[i].fd == STDIN_FILENO)
+					ServerCommand(); //--> handle admin commands
+				else if (fds[i].fd == SerSocketFd)
 					AcceptNewClient(); //-> accept new client
 				else
 					ReceiveNewData(fds[i].fd); //-> receive new data from a registered client
