@@ -18,16 +18,30 @@ class   Server;
 class Client //-> class for client
 {
 private:
-	int Fd; //-> client file descriptor
-	std::string IPadd; //-> client ip address
+	int 		Fd;
+	std::string IPadd;
 	std::string	messageBuffer;
+	int			loginStatus;
+
+	std::string	nick;
+	std::string user[4];
 public:
-	Client(){}; //-> default constructor
-	int GetFd(){return Fd;} //-> getter for fd
+	Client(){loginStatus = 0;};
 
-	void SetFd(int fd){Fd = fd;} //-> setter for fd
-	void setIpAdd(std::string ipadd){IPadd = ipadd;} //-> setter for ipadd
+	int GetFd(){return Fd;}
+	int getStatus(void) const;
 
+//---LOGIN---------------------------------------
+	void		setNick(std::string const &nick);
+	std::string getNick(void) const;
+	void		setUser(std::string const &username, std::string const &hostName, std::string const &serverName, std::string const &realName);
+	std::string	getUser(int i) const;
+	void		printLoginStatus(void) const;
+
+	void SetFd(int fd){Fd = fd;}
+	void setIpAdd(std::string ipadd){IPadd = ipadd;}
+	void incrementStatus(void);
+	void clientLog(std::string const &msg) const;
 	std::string	readMessage();
 };
 

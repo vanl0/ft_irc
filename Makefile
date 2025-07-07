@@ -4,7 +4,7 @@ CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 HEADERS = Client.hpp Client.hpp Server.hpp
-SRCS = main.cpp Client.cpp Channel.cpp Server.cpp parsing.cpp
+SRCS = main.cpp Client.cpp Channel.cpp Server.cpp parsing.cpp login.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 all: $(NAME)

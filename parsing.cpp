@@ -12,8 +12,11 @@ void Server::parseInput(int fd, std::istringstream &strm_msg){
 		if (commands[i] == command)
 			break;
 	}
-	//if (i > 2 && clients[fd].getStatus() < 3)
-	//	return (clientLog(fd, "You must register first\n"));
+	if (i > 2 && clients[fd].getStatus() < 3){
+		clients[fd].clientLog("You need to be registered first!\n");
+		clients[fd].printLoginStatus();
+		return;
+	}
 	switch (i)
 	{
 		case (0):
@@ -59,23 +62,6 @@ void Server::parseInput(int fd, std::istringstream &strm_msg){
 }
 
 
-void Server::pass(int fd, std::istringstream& msg) {
-    std::string restOfMsg;
-    std::getline(msg, restOfMsg);
-    std::cout << "[PASS] fd: " << fd << " msg:" << restOfMsg << std::endl;
-}
-
-void Server::user(int fd, std::istringstream& msg) {
-    std::string restOfMsg;
-    std::getline(msg, restOfMsg);
-    std::cout << "[USER] fd: " << fd << " msg:" << restOfMsg << std::endl;
-}
-
-void Server::nick(int fd, std::istringstream& msg) {
-    std::string restOfMsg;
-    std::getline(msg, restOfMsg);
-    std::cout << "[NICK] fd: " << fd << " msg:" << restOfMsg << std::endl;
-}
 
 void Server::privmsg(int fd, std::istringstream& msg) {
     std::string restOfMsg;
