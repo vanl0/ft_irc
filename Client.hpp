@@ -15,26 +15,17 @@
 
 class   Server;
 
-class   Client{
-
+class Client //-> class for client
+{
 private:
-    bool    _isRegistered;
-
-    std::string _name;
-    std::string _nick;
-
-    int         _fd;
-
-    //std::vector<Channel>    _channels;
-
-
+	int Fd; //-> client file descriptor
+	std::string IPadd; //-> client ip address
 public:
-    Client();
-    ~Client();
+	Client(){}; //-> default constructor
+	int GetFd(){return Fd;} //-> getter for fd
 
-    std::string getName(void) const;
-    std::string getNick(void) const;
-    int         getFd(void) const;
+	void SetFd(int fd){Fd = fd;} //-> setter for fd
+	void setIpAdd(std::string ipadd){IPadd = ipadd;} //-> setter for ipadd
 };
 
 #endif
