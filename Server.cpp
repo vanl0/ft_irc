@@ -178,6 +178,11 @@ void Server::ServerInit(int port, const std::string &pass)
 	CloseFds(); //-> close the file descriptors when the server stops
 }
 
+bool Server::isEmpty(std::istringstream &sstream){
+	std::string rest;
 
-
-
+	sstream >> rest;
+	if (rest.empty())
+		return true;
+	return false;
+}
