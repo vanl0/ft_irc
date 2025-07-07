@@ -57,3 +57,4 @@ int main(int argc, char *argv[])
 	}
 	std::cout << "The IRC server closed!" << std::endl;
 }
+

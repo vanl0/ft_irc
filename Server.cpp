@@ -10,14 +10,7 @@ void Server::ClearClients(int fd)
 			break;
 		}
 	}
-	for(size_t i = 0; i < clients.size(); i++)
-	{ //-> remove the client from the vector of clients
-		if (clients[i].GetFd() == fd)
-		{
-			clients.erase(clients.begin() + i);
-			break;
-		}
-	}
+	clients.erase(fd);
 
 }
 
@@ -60,7 +53,10 @@ void Server::ReceiveNewData(int fd)
 	else
 	{ //-> print the received data
 		buff[bytes] = '\0';
+		std::istringstream strmMsg((std::string(buff)));
+		parseInput(fd, strmMsg);
 		std::cout << YEL << "Client <" << fd << "> Data: " << WHI << buff;
+		
 		//here you can add your code to process the received data: parse, check, authenticate, handle the command, etc...
 	}
 }
@@ -85,7 +81,7 @@ void Server::AcceptNewClient()
 
 	cli.SetFd(incofd); //-> set the client file descriptor
 	cli.setIpAdd(inet_ntoa((cliadd.sin_addr))); //-> convert the ip address to string and set it
-	clients.push_back(cli); //-> add the client to the vector of clients
+	clients[incofd] = cli; //-> add the client to the vector of clients
 	fds.push_back(NewPoll); //-> add the client socket to the pollfd
 
 	std::cout << GRE << "Client <" << incofd << "> Connected" << WHI << std::endl;
@@ -146,3 +142,7 @@ void Server::ServerInit(int port, const std::string &pass)
 	}
 	CloseFds(); //-> close the file descriptors when the server stops
 }
+
+
+
+
