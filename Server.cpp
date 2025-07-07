@@ -105,12 +105,13 @@ void Server::SerSocket()
 	fds.push_back(NewPoll); //-> add the server socket to the pollfd
 }
 
-void Server::ServerInit()
+void Server::ServerInit(int port, const std::string &pass)
 {
-	this->Port = 4444;
+	this->Port = port;
+    this->password = pass;
 	SerSocket(); //-> create the server socket
 
-	std::cout << GRE << "Server <" << SerSocketFd << "> Connected" << WHI << std::endl;
+	std::cout << GRE << "IRC Server <" << SerSocketFd << "> Connected on port [" << this->Port << "]" << WHI << std::endl;
 	std::cout << "Waiting to accept a connection...\n";
 
 	while (Server::Signal == false){ //-> run the server until the signal is received
