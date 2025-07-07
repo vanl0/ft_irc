@@ -2,7 +2,7 @@
 
 void Server::ClearClients(int fd)
 { //-> clear the clients
-	for(size_t i = 0; i < fds.size(); i++)
+	for (size_t i = 0; i < fds.size(); i++)
 	{ //-> remove the client from the pollfd
 		if (fds[i].fd == fd)
 		{
@@ -25,7 +25,7 @@ void Server::SignalHandler(int signum)
 
 void	Server::CloseFds()
 {
-	for(size_t i = 0; i < clients.size(); i++)
+	for (size_t i = 0; i < clients.size(); i++)
 	{ //-> close all the clients
 		std::cout << RED << "Client <" << clients[i].GetFd() << "> Disconnected" << WHI << std::endl;
 		close(clients[i].GetFd());
@@ -70,10 +70,16 @@ void Server::AcceptNewClient()
 
 	int incofd = accept(SerSocketFd, (sockaddr *)&(cliadd), &len); //-> accept the new client
 	if (incofd == -1)
-		{std::cout << "accept() failed" << std::endl; return;}
+	{
+		std::cout << "accept() failed" << std::endl;
+		return;
+	}
 
 	if (fcntl(incofd, F_SETFL, O_NONBLOCK) == -1) //-> set the socket option (O_NONBLOCK) for non-blocking socket
-		{std::cout << "fcntl() failed" << std::endl; return;}
+	{
+		std::cout << "fcntl() failed" << std::endl;
+		return;
+	}
 
 	NewPoll.fd = incofd; //-> add the client socket to the pollfd
 	NewPoll.events = POLLIN; //-> set the event to POLLIN for reading data
@@ -94,7 +100,8 @@ void Server::ServerCommand()
 	if (line.empty())
 		return;
 
-	if (line == "exit") {
+	if (line == "exit")
+	{
 		Server::Signal = true;
 		std::cout << "Shutting down server..." << std::endl;
 		return;
@@ -149,7 +156,8 @@ void Server::ServerInit(int port, const std::string &pass)
 	std::cout << GRE << "IRC server <" << SerSocketFd << "> connected on port [" << this->Port << "]" << WHI << std::endl;
 	std::cout << "Waiting to accept a new connection...\n";
 
-	while (Server::Signal == false){ //-> run the server until the signal is received
+	while (Server::Signal == false)
+	{ //-> run the server until the signal is received
 
 		if ((poll(&fds[0],fds.size(),-1) == -1) && Server::Signal == false) //-> wait for an event
 			throw (std::runtime_error("poll() failed"));
