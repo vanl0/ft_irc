@@ -1,7 +1,13 @@
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
-
+enum CommandType {
+	PASS,
+	NICK,
+	USER,
+	JOIN,
+	PRIVMSG
+};
 #include "Channel.hpp"
 #include "Client.hpp"
 #include "Server.hpp"
@@ -16,6 +22,8 @@
 #include <poll.h> //-> for poll()
 #include <csignal> //-> for signal()
 #include <cstring>
+#include <map>
+#include <sstream>
 //-------------------------------------------------------//
 #define RED "\e[1;31m" //-> for red color
 #define WHI "\e[0;37m" //-> for white color
@@ -30,7 +38,7 @@ private:
 	int Port; //-> server port
 	int SerSocketFd; //-> server socket file descriptor
 	static bool Signal; //-> static boolean for signal
-	std::vector<Client> clients; //-> vector of clients
+	std::map<int, Client> clients; //-> vector of clients
 	std::vector<struct pollfd> fds; //-> vector of pollfd
 public:
 	Server(): SerSocketFd(-1) {} //-> default constructor
@@ -42,6 +50,20 @@ public:
 
 	static void SignalHandler(int signum); //-> signal handler
 	
+	void parseInput(int fd, std::istringstream &strmMsg);
+	void pass(int fd, std::istringstream& msg);
+	void user(int fd, std::istringstream& msg);
+	void nick(int fd, std::istringstream& msg);
+	void privmsg(int fd, std::istringstream& msg);
+	void join(int fd, std::istringstream& msg);
+	void kick(int fd, std::istringstream& msg);
+	void topic(int fd, std::istringstream& msg);
+	void invite(int fd, std::istringstream& msg);
+	void mode(int fd, std::istringstream& msg);
+	void bet(int fd, std::istringstream& msg);
+	void dcc(int fd, std::istringstream& msg);
+    void commandLog(const std::string& command, bool status);
+
 	void CloseFds(); //-> close file descriptors
 	void ClearClients(int fd); //-> clear clients
 };
