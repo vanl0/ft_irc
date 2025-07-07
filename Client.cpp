@@ -20,6 +20,11 @@ void Client::clientLog(const std::string &msg) const{
 	send(this->Fd, msg.c_str(), msg.length(), 0);
 }
 
+void Client::clientLog(const std::string &msg, const char *color) const {
+	std::string coloredMsg = std::string(color) + msg + "\e[0m";
+	send(this->Fd, coloredMsg.c_str(), coloredMsg.length(), 0);
+}
+
 
 void Client::setUser(const std::string &userName, const std::string &hostName, const std::string &serverName, const std::string &realName){
 	this->user[0] = userName;

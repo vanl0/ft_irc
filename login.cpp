@@ -14,7 +14,7 @@ void Server::pass(int fd, std::istringstream& msg) {
 		return;
 	}
 	if (clientPass == this->password){
-		clients[fd].clientLog("Password correct! ");
+		clients[fd].clientLog("Password correct! ", GRE);
 		clients[fd].incrementStatus();
 		clients[fd].printLoginStatus();
 	} else {
@@ -37,7 +37,7 @@ void Server::nick(int fd, std::istringstream& msg) {
 	} else {
 		//!!check if its repeated
 		clients[fd].setNick(clientNick);
-		clients[fd].clientLog("Nick set successfuly!\n");
+		clients[fd].clientLog("Nick set successfuly!\n", GRE);
 		if (clients[fd].getStatus() == 1){
 			clients[fd].incrementStatus();
 			clients[fd].printLoginStatus();
@@ -78,5 +78,5 @@ void Server::user(int fd, std::istringstream& msg) {
 	clientRealname.erase(0, 1);
 	clients[fd].setUser(clientUser, clientHostname, clientServername, clientHostname);
 	clients[fd].incrementStatus();
-	clients[fd].clientLog("User set up succesfully, welcome!\n");
+	clients[fd].clientLog("User set up succesfully, welcome!\n", GRE);
 }

@@ -42,6 +42,7 @@ public:
 	void setIpAdd(std::string ipadd){IPadd = ipadd;}
 	void incrementStatus(void);
 	void clientLog(std::string const &msg) const;
+	void clientLog(std::string const &msg, const char* color) const;
 	std::string	readMessage();
 };
 
