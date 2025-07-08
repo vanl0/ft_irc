@@ -2,6 +2,7 @@
 #ifndef CLIENT_HPP
 # define CLIENT_HPP
 
+# include "utils.hpp"
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <netinet/in.h>

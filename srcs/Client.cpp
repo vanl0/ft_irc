@@ -17,12 +17,11 @@ void Client::incrementStatus(){
 }
 
 void Client::clientLog(const std::string &msg) const{
-	send(this->Fd, msg.c_str(), msg.length(), 0);
+	sendMsgFd(this->Fd, msg);
 }
 
 void Client::clientLog(const std::string &msg, const char *color) const {
-	std::string coloredMsg = std::string(color) + msg + "\e[0m";
-	send(this->Fd, coloredMsg.c_str(), coloredMsg.length(), 0);
+	sendMsgFd(this->Fd, msg, color);
 }
 
 

@@ -90,6 +90,7 @@ void Server::AcceptNewClient()
 	clients[incofd] = cli; //-> add the client to the vector of clients
 	fds.push_back(NewPoll); //-> add the client socket to the pollfd
 
+	cli.clientLog("Welcome to ircserv, provide a valid password using PASS <password>\n");
 	std::cout << GRE << "Client <" << incofd << "> Connected" << WHI << std::endl;
 }
 

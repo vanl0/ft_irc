@@ -69,12 +69,6 @@ void Server::privmsg(int fd, std::istringstream& msg) {
     std::cout << "[PRIVMSG] fd: " << fd << " msg:" << restOfMsg << std::endl;
 }
 
-void Server::join(int fd, std::istringstream& msg) {
-    std::string restOfMsg;
-    std::getline(msg, restOfMsg);
-    std::cout << "[JOIN] fd: " << fd << " msg:" << restOfMsg << std::endl;
-}
-
 void Server::kick(int fd, std::istringstream& msg) {
     std::string restOfMsg;
     std::getline(msg, restOfMsg);

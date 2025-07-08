@@ -1,17 +1,13 @@
 
 #ifndef SERVER_HPP
 # define SERVER_HPP
-enum CommandType {
-	PASS,
-	NICK,
-	USER,
-	JOIN,
-	PRIVMSG
-};
+
+# include "utils.hpp"
 # include "Channel.hpp"
 # include "Client.hpp"
 # include "Server.hpp"
 # include <iostream>
+# include <cstdlib>
 # include <vector> //-> for vector
 # include <sys/socket.h> //-> for socket()
 # include <sys/types.h> //-> for socket()
@@ -24,12 +20,14 @@ enum CommandType {
 # include <cstring>
 # include <map>
 # include <sstream>
-//-------------------------------------------------------//
-# define RED "\e[1;31m" //-> for red color
-# define WHI "\e[0;37m" //-> for white color
-# define GRE "\e[1;32m" //-> for green color
-# define YEL "\e[1;33m" //-> for yellow color
-# include "Client.hpp"
+
+enum CommandType {
+	PASS,
+	NICK,
+	USER,
+	JOIN,
+	PRIVMSG
+};
 
 class Server //-> class for server
 {
@@ -40,6 +38,7 @@ private:
 	static bool Signal; //-> static boolean for signal
 	std::map<int, Client> clients; //-> vector of clients
 	std::vector<struct pollfd> fds; //-> vector of pollfd
+	std::map<std::string, Channel> channels;
 public:
 	Server(): SerSocketFd(-1) {} //-> default constructor
 

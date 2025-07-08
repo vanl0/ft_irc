@@ -11,8 +11,13 @@ class Channel
 		std::set<int> members;
 		std::string topic;
 	public:
-		Channel(const std::string &channelName) : name(channelName) {};
+		Channel(const std::string &channelName);
 		
+		std::string getName(void);
+
+		void addUser(int fd);
+		void removeUser(int fd);
+		bool isInChannel(int fd) const;
 
 
 };
