@@ -26,6 +26,8 @@ private:
 
 	std::string	nick;
 	std::string user[4];
+
+	std::string _partialMsg;
 public:
 	Client(){loginStatus = 0;};
 	int GetFd(){return Fd;}
@@ -37,6 +39,10 @@ public:
 	void		setUser(std::string const &username, std::string const &hostName, std::string const &serverName, std::string const &realName);
 	std::string	getUser(int i) const;
 	void		printLoginStatus(void) const;
+
+	std::string readMessage(int const fd);
+	std::string	appendPartial(char *buffer);
+	void		setPartial(std::string const &part);
 
 	void SetFd(int fd){Fd = fd;}
 	void setIpAdd(std::string ipadd){IPadd = ipadd;}
