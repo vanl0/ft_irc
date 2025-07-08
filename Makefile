@@ -1,25 +1,53 @@
 NAME = ircserv
-
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
+INCLUDES = -I$(HEADERS_DIR)
 
-HEADERS = Client.hpp Client.hpp Server.hpp
-SRCS = main.cpp Client.cpp Channel.cpp Server.cpp parsing.cpp login.cpp
-OBJS = $(SRCS:.cpp=.o)
+HEADERS_DIR = ./headers/
+HEADERS_LS = Server.hpp\
+			 Client.hpp\
+			 Channel.hpp
+HEADERS = $(addprefix $(HEADERS_DIR), $(HEADERS_LS))
+
+SRCS_DIR = srcs/
+OBJS_DIR = objs/
+
+SRCS_LS =	main.cpp\
+			Client.cpp\
+			Server.cpp\
+			Channel.cpp\
+			parsing.cpp\
+			login.cpp
+
+SRCS = $(addprefix $(SRCS_DIR), $(SRCS_LS))
+OBJS = $(addprefix $(OBJS_DIR),$(notdir $(SRCS_LS:.cpp=.o)))
+
+GRAY = \033[2;29m
+GREEN = \033[0;32m
+YELLOW = \033[0;33m
+NC = \033[0m
+
 
 all: $(NAME)
 
-$(NAME): $(OBJS) $(HEADERS)
-	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJS)
+#MINISHELL
+$(NAME): $(OBJS_DIR) $(OBJS) $(HEADERS) Makefile	
+	$(CXX) $(CXXFLAGS) $(OBJS) $(LIB_FLAGS) $(INCLUDES) -o $@ 
 
-%.o: %.cpp $(HEADERS) Makefile
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+#OBJS
+$(OBJS_DIR)%.o: $(SRCS_DIR)%.cpp $(HEADERS) Makefile
+	$(CXX) -c $(CXXFLAGS) $(INCLUDES) $<  -o $@ 
 
+$(OBJS_DIR):
+	@mkdir $@
+
+#CLEAN
 clean:
-	rm -f $(OBJS)
-
+	@rm -rf $(OBJS_DIR)
+	@echo "$(GREEN)Objects removed$(NC)"
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
+	@echo "$(GREEN)Objects and executables removed$(NC)"
 
 re: fclean all
 
