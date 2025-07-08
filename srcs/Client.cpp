@@ -7,7 +7,6 @@ int Client::getStatus() const{
 void Client::setNick(const std::string &nick){
 	this->nick = nick;
 }
-
 std::string Client::getNick() const{
 	return this->nick;
 }
@@ -38,6 +37,28 @@ std::string Client::getUser(int i) const{
 	else
 		return NULL;
 }
+
+std::string Client::readMessage(int const fd){
+	char	buffer[1024] = {0};
+	ssize_t read_bytes = recv(fd, buffer, sizeof(buffer) - 1 , 0);
+	
+	if (read_bytes <= 0){
+		return std::string();
+	} else {
+		return _partialMsg.append(buffer, read_bytes);
+	}
+}
+
+std::string Client::appendPartial(char *buffer){
+	if (!_partialMsg.empty())
+		return _partialMsg.append(buffer);
+	return buffer;
+}
+
+void Client::setPartial(const std::string &part){
+	_partialMsg = part;
+}
+
 
 void Client::printLoginStatus() const{
 	switch (loginStatus) {

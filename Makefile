@@ -20,7 +20,7 @@ SRCS_LS =	main.cpp\
 			parsing.cpp\
 			login.cpp\
 			utils.cpp\
-			join.cpp\
+			channelCmds.cpp\
 			privMsg.cpp
 
 SRCS = $(addprefix $(SRCS_DIR), $(SRCS_LS))

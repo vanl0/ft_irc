@@ -1,5 +1,5 @@
 #include "Server.hpp"
-
+#include <algorithm>
 void Server::ClearClients(int fd)
 { //-> clear the clients
 	for (size_t i = 0; i < fds.size(); i++)
@@ -39,26 +39,31 @@ void	Server::CloseFds()
 
 void Server::ReceiveNewData(int fd)
 {
-	char buff[1024]; //-> buffer for the received data
-	memset(buff, 0, sizeof(buff)); //-> clear the buffer
+	char buff[1024];
+	memset(buff, 0, sizeof(buff));
 
-	ssize_t bytes = recv(fd, buff, sizeof(buff) - 1 , 0); //-> receive the data
-
-	if (bytes <= 0)
-	{ //-> check if the client disconnected
-		std::cout << RED << "Client <" << fd << "> Disconnected" << WHI << std::endl;
+	ssize_t bytes = recv(fd, buff, sizeof(buff) - 1 , 0);
+	buff[bytes] = '\0';
+	std::string completeMsg = clients[fd].appendPartial(buff);
+	if (bytes <= 0 || completeMsg.empty())
+	{
+		std::cout << RED << "Client <" << clients[fd].getNick() << "> Disconnected" << WHI << std::endl;
 		nickFd.erase(clients[fd].getNick());
 		ClearClients(fd); //-> clear the client
 		close(fd); //-> close the client socket
 	}
 	else
-	{ //-> print the received data
-		buff[bytes] = '\0';
-		std::istringstream strmMsg((std::string(buff)));
-		parseInput(fd, strmMsg);
+	{
+		completeMsg.erase(std::remove(completeMsg.begin(), completeMsg.end(), '\r'), completeMsg.end());
+		size_t pos = completeMsg.find('\n');
+		while (pos != std::string::npos){
+			std::istringstream command(completeMsg.substr(0,pos));
+			completeMsg = completeMsg.substr(pos + 1);
+			parseInput(fd, command);
+			pos = completeMsg.find('\n');
+		}
+		clients[fd].setPartial(completeMsg);
 		std::cout << YEL << "Client <" << fd << "> Data: " << WHI << buff;
-		
-		//here you can add your code to process the received data: parse, check, authenticate, handle the command, etc...
 	}
 }
 

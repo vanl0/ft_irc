@@ -68,6 +68,7 @@ public:
 	void dcc(int fd, std::istringstream& msg);
 	void commandLog(const std::string& command, bool status);
 
+	bool validNick(std::string const &nick);
 	bool isEmpty(std::istringstream &sstream);
 	void CloseFds(); //-> close file descriptors
 	void ClearClients(int fd); //-> clear clients

@@ -1,5 +1,6 @@
 #include "Server.hpp"
 
+
 void Server::parseInput(int fd, std::istringstream &strm_msg){
 	int i;
 	std::string command;

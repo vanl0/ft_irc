@@ -22,4 +22,3 @@ void Server::join(int fd, std::istringstream& msg)
 	else
 		sendMsgFd(fd, "You are already in the [" + ch.getName() + "] channel!\n", RED);
 }
-	
