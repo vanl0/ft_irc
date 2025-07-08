@@ -1,6 +1,6 @@
 #include "Channel.hpp"
 
-Channel::Channel(const std::string &channelName) : name(channelName), topicRights(false) {};
+Channel::Channel(const std::string &channelName) : name(channelName),  topic("No topic is set.\n"), topicRights(false) {};
 		
 std::string Channel::getName(void)
 {

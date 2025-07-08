@@ -5,6 +5,7 @@ void Server::topic(int fd, std::istringstream &msg){
 	std::string newTopic;
 	Client		client = clients[fd];
 
+
 	msg >> channelName;
 	std::getline(msg >> std::ws, newTopic);
 
@@ -26,14 +27,10 @@ void Server::topic(int fd, std::istringstream &msg){
 		return;
 	}
 	if (newTopic.empty()){
-		client.clientLog(channelName + " :");
-		if (it->second.getTopic().empty())
-			client.clientLog("No topic is set.\n");
-		else
-			client.clientLog(it->second.getTopic());
+		client.clientLog(channelName + " :" + it->second.getTopic() + "\r\n");
 	} else {
 		if (!it->second.isOperator(fd) && !it->second.getTopicRights())
-			client.clientLog("You need to be an operator of " + channelName + "to change its topic\n", RED);
+			client.clientLog("You need to be an operator of " + channelName + "to change its topic\r\n", RED);
 		else{
 			it->second.setTopic(newTopic);
 		}
