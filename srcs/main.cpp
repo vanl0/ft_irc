@@ -19,6 +19,10 @@
 #define GRE "\e[1;32m" //-> for green color
 #define YEL "\e[1;33m" //-> for yellow color
 
+/*
+printf "PASS hola\r\nNICK mynick\r\nUSER myuser 0 * :My Real Name\r\n" | nc localhost 4444
+*/
+
 static void validateInput(int argc, char *argv[])
 {
 	if (argc != 3)

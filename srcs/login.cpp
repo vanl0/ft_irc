@@ -43,13 +43,13 @@ void Server::nick(int fd, std::istringstream& msg) {
 	if (!isEmpty(msg) || clientNick.empty()){
 		clients[fd].clientLog("Wrong syntax: ");
 		clients[fd].printLoginStatus();
+		return;
 	}
 	if (!validNick(clientNick)){
 		clients[fd].clientLog("This nick is already in use\n", RED);
 		clients[fd].printLoginStatus();
 		return;
 	} else {
-		//!!check if its repeated
 		clients[fd].setNick(clientNick);
 		clients[fd].clientLog("Nick set successfuly!\n", GRE);
 		if (clients[fd].getStatus() == 1){

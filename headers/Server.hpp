@@ -40,6 +40,7 @@ private:
 	static bool Signal; //-> static boolean for signal
 	std::map<int, Client> clients; //-> vector of clients
 	std::vector<struct pollfd> fds; //-> vector of pollfd
+	
 public:
 	Server(): SerSocketFd(-1) {} //-> default constructor
 

@@ -7,7 +7,6 @@ int Client::getStatus() const{
 void Client::setNick(const std::string &nick){
 	this->nick = nick;
 }
-
 std::string Client::getNick() const{
 	return this->nick;
 }
@@ -15,16 +14,6 @@ std::string Client::getNick() const{
 void Client::incrementStatus(){
 	this->loginStatus++;
 }
-
-void Client::clientLog(const std::string &msg) const{
-	send(this->Fd, msg.c_str(), msg.length(), 0);
-}
-
-void Client::clientLog(const std::string &msg, const char *color) const {
-	std::string coloredMsg = std::string(color) + msg + "\e[0m";
-	send(this->Fd, coloredMsg.c_str(), coloredMsg.length(), 0);
-}
-
 
 void Client::setUser(const std::string &userName, const std::string &hostName, const std::string &serverName, const std::string &realName){
 	this->user[0] = userName;
@@ -38,6 +27,36 @@ std::string Client::getUser(int i) const{
 		return this->user[i];
 	else
 		return NULL;
+}
+
+std::string Client::readMessage(int const fd){
+	char	buffer[1024] = {0};
+	ssize_t read_bytes = recv(fd, buffer, sizeof(buffer) - 1 , 0);
+	
+	if (read_bytes <= 0){
+		return std::string();
+	} else {
+		return _partialMsg.append(buffer, read_bytes);
+	}
+}
+
+std::string Client::appendPartial(char *buffer){
+	if (!_partialMsg.empty())
+		return _partialMsg.append(buffer);
+	return buffer;
+}
+
+void Client::setPartial(const std::string &part){
+	_partialMsg = part;
+}
+
+void Client::clientLog(const std::string &msg) const{
+	send(this->Fd, msg.c_str(), msg.length(), 0);
+}
+
+void Client::clientLog(const std::string &msg, const char *color) const {
+	std::string coloredMsg = std::string(color) + msg + "\e[0m";
+	send(this->Fd, coloredMsg.c_str(), coloredMsg.length(), 0);
 }
 
 void Client::printLoginStatus() const{
