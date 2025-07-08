@@ -59,14 +59,6 @@ void Client::setPartial(const std::string &part){
 	_partialMsg = part;
 }
 
-void Client::clientLog(const std::string &msg) const{
-	send(this->Fd, msg.c_str(), msg.length(), 0);
-}
-
-void Client::clientLog(const std::string &msg, const char *color) const {
-	std::string coloredMsg = std::string(color) + msg + "\e[0m";
-	send(this->Fd, coloredMsg.c_str(), coloredMsg.length(), 0);
-}
 
 void Client::printLoginStatus() const{
 	switch (loginStatus) {
