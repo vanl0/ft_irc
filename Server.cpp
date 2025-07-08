@@ -144,8 +144,7 @@ void Server::ServerInit(int port, const std::string &pass)
 	this->Port = port;
     this->password = pass;
 	SerSocket(); //-> create the server socket
-	// add STDIN to the poll list for server commands
-	struct pollfd stdInPoll;
+	struct pollfd stdInPoll; // adding STDIN to the poll list for server commands
 	stdInPoll.fd = STDIN_FILENO;
 	stdInPoll.events = POLLIN;
 	stdInPoll.revents = 0;

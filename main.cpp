@@ -28,7 +28,7 @@ static void validateInput(int argc, char *argv[])
 	for (size_t i = 0; i < inputPort.size(); i++)
 	{
 		if (!std::isdigit(inputPort[i]))
-			throw(std::runtime_error("[INPUT] The port must be a number ."));
+			throw(std::runtime_error("[INPUT] The port must be a number."));
 	}
 	long portNum = std::atol(inputPort.c_str());
 	if (portNum < 1024 || portNum > 65535)
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 	catch(const std::exception& e)
 	{
 		ser.CloseFds(); //-> close the file descriptors
-		std::cerr << e.what() << std::endl;
+		std::cerr << "Error: " << e.what() << std::endl;
 	}
 	std::cout << "The IRC server closed!" << std::endl;
 }

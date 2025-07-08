@@ -1,17 +1,17 @@
 
 #ifndef CLIENT_HPP
-#define CLIENT_HPP
+# define CLIENT_HPP
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <unistd.h>
-#include <iostream>
-#include <cstring>
-#include <cstdio>
-#include <poll.h>
-#include <vector>
-#include <fcntl.h>
+# include <sys/types.h>
+# include <sys/socket.h>
+# include <netinet/in.h>
+# include <unistd.h>
+# include <iostream>
+# include <cstring>
+# include <cstdio>
+# include <poll.h>
+# include <vector>
+# include <fcntl.h>
 
 class   Server;
 
@@ -27,7 +27,6 @@ private:
 	std::string user[4];
 public:
 	Client(){loginStatus = 0;};
-
 	int GetFd(){return Fd;}
 	int getStatus(void) const;
 

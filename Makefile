@@ -3,7 +3,7 @@ NAME = ircserv
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-HEADERS = Client.hpp Client.hpp Server.hpp
+HEADERS = Client.hpp Client.hpp Server.hpp Channel.hpp
 SRCS = main.cpp Client.cpp Channel.cpp Server.cpp parsing.cpp login.cpp
 OBJS = $(SRCS:.cpp=.o)
 
