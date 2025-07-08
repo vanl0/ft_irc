@@ -20,7 +20,8 @@ SRCS_LS =	main.cpp\
 			parsing.cpp\
 			login.cpp\
 			utils.cpp\
-			join.cpp
+			join.cpp\
+			privMsg.cpp
 
 SRCS = $(addprefix $(SRCS_DIR), $(SRCS_LS))
 OBJS = $(addprefix $(OBJS_DIR),$(notdir $(SRCS_LS:.cpp=.o)))

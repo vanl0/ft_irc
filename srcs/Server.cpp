@@ -47,6 +47,7 @@ void Server::ReceiveNewData(int fd)
 	if (bytes <= 0)
 	{ //-> check if the client disconnected
 		std::cout << RED << "Client <" << fd << "> Disconnected" << WHI << std::endl;
+		nickFd.erase(clients[fd].getNick());
 		ClearClients(fd); //-> clear the client
 		close(fd); //-> close the client socket
 	}
@@ -87,7 +88,7 @@ void Server::AcceptNewClient()
 
 	cli.SetFd(incofd); //-> set the client file descriptor
 	cli.setIpAdd(inet_ntoa((cliadd.sin_addr))); //-> convert the ip address to string and set it
-	clients[incofd] = cli; //-> add the client to the vector of clients
+	clients[incofd] = cli; //-> add the client to the map of clients
 	fds.push_back(NewPoll); //-> add the client socket to the pollfd
 
 	cli.clientLog("Welcome to ircserv, provide a valid password using PASS <password>\n");
@@ -143,7 +144,7 @@ void Server::SerSocket()
 void Server::ServerInit(int port, const std::string &pass)
 {
 	this->Port = port;
-    this->password = pass;
+	this->password = pass;
 	SerSocket(); //-> create the server socket
 	struct pollfd stdInPoll; // adding STDIN to the poll list for server commands
 	stdInPoll.fd = STDIN_FILENO;

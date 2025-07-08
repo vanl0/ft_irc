@@ -26,7 +26,7 @@ void Channel::removeUser(int fd)
 {
 	if (isInChannel(fd))
 	{
-		this->members.erase(this->members.find(fd));
+		this->members.erase(fd);
 		if (isOperator(fd))
 			removeOperator(fd);
 	}
@@ -47,5 +47,5 @@ void Channel::addOperator(int fd)
 void Channel::removeOperator(int fd)
 {
 	if (isOperator(fd))
-		this->operators.erase(this->operators.find(fd));
+		this->operators.erase(fd);
 }

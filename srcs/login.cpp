@@ -37,7 +37,8 @@ void Server::nick(int fd, std::istringstream& msg) {
 	} else {
 		//!!check if its repeated
 		clients[fd].setNick(clientNick);
-		clients[fd].clientLog("Nick set successfuly!\n", GRE);
+		nickFd[clientNick] = fd; // added to quickly convert string (nick) to int (fd)
+		clients[fd].clientLog("Nickname set successfuly!\n", GRE);
 		if (clients[fd].getStatus() == 1){
 			clients[fd].incrementStatus();
 			clients[fd].printLoginStatus();
@@ -68,7 +69,7 @@ void Server::user(int fd, std::istringstream& msg) {
 	msg >> clientUser >> clientHostname >> clientServername;
 	std::getline(msg >> std::ws, clientRealname);
 	if (clientUser.empty() || clientHostname.empty() ||\
-	    clientServername.empty() || clientRealname.empty() ||\
+		clientServername.empty() || clientRealname.empty() ||\
 		clientRealname[0] != ':')
 	{
 			clients[fd].clientLog("Wrong syntax: ");

@@ -61,48 +61,42 @@ void Server::parseInput(int fd, std::istringstream &strm_msg){
 	}
 }
 
-void Server::privmsg(int fd, std::istringstream& msg) {
-    std::string restOfMsg;
-    std::getline(msg, restOfMsg);
-    std::cout << "[PRIVMSG] fd: " << fd << " msg:" << restOfMsg << std::endl;
-}
-
 void Server::kick(int fd, std::istringstream& msg) {
-    std::string restOfMsg;
-    std::getline(msg, restOfMsg);
-    std::cout << "[KICK] fd: " << fd << " msg:" << restOfMsg << std::endl;
+	std::string restOfMsg;
+	std::getline(msg, restOfMsg);
+	std::cout << "[KICK] fd: " << fd << " msg:" << restOfMsg << std::endl;
 }
 
 void Server::topic(int fd, std::istringstream& msg) {
-    std::string restOfMsg;
-    std::getline(msg, restOfMsg);
-    std::cout << "[TOPIC] fd: " << fd << " msg:" << restOfMsg << std::endl;
+	std::string restOfMsg;
+	std::getline(msg, restOfMsg);
+	std::cout << "[TOPIC] fd: " << fd << " msg:" << restOfMsg << std::endl;
 }
 
 void Server::invite(int fd, std::istringstream& msg) {
-    std::string restOfMsg;
-    std::getline(msg, restOfMsg);
-    std::cout << "[INVITE] fd: " << fd << " msg:" << restOfMsg << std::endl;
+	std::string restOfMsg;
+	std::getline(msg, restOfMsg);
+	std::cout << "[INVITE] fd: " << fd << " msg:" << restOfMsg << std::endl;
 }
 
 void Server::mode(int fd, std::istringstream& msg) {
-    std::string restOfMsg;
-    std::getline(msg, restOfMsg);
-    std::cout << "[MODE] fd: " << fd << " msg:" << restOfMsg << std::endl;
+	std::string restOfMsg;
+	std::getline(msg, restOfMsg);
+	std::cout << "[MODE] fd: " << fd << " msg:" << restOfMsg << std::endl;
 }
 
 void Server::bet(int fd, std::istringstream& msg) {
-    std::string restOfMsg;
-    std::getline(msg, restOfMsg);
-    std::cout << "[BET] fd: " << fd << " msg:" << restOfMsg << std::endl;
+	std::string restOfMsg;
+	std::getline(msg, restOfMsg);
+	std::cout << "[BET] fd: " << fd << " msg:" << restOfMsg << std::endl;
 }
 
 void Server::dcc(int fd, std::istringstream& msg) {
-    std::string restOfMsg;
-    std::getline(msg, restOfMsg);
-    std::cout << "[DCC] fd: " << fd << " msg:" << restOfMsg << std::endl;
+	std::string restOfMsg;
+	std::getline(msg, restOfMsg);
+	std::cout << "[DCC] fd: " << fd << " msg:" << restOfMsg << std::endl;
 }
 
 void Server::commandLog(const std::string& command, bool status) {
-    std::cout << "[LOG] Command: " << command << " Status: " << (status ? "OK" : "FAIL") << std::endl;
+	std::cout << "[LOG] Command: " << command << " Status: " << (status ? "OK" : "FAIL") << std::endl;
 }

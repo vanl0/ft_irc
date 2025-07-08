@@ -36,9 +36,12 @@ private:
 	int Port; //-> server port
 	int SerSocketFd; //-> server socket file descriptor
 	static bool Signal; //-> static boolean for signal
+
 	std::map<int, Client> clients; //-> vector of clients
 	std::vector<struct pollfd> fds; //-> vector of pollfd
-	std::map<std::string, Channel> channels;
+
+	std::map<std::string, Channel> channels; // map of <Channel name, Channel class> to quickly add channels
+	std::map<std::string, int>	nickFd; // map of <nickame, fd> to quickly search clients fd
 public:
 	Server(): SerSocketFd(-1) {} //-> default constructor
 
@@ -63,7 +66,7 @@ public:
 	void mode(int fd, std::istringstream& msg);
 	void bet(int fd, std::istringstream& msg);
 	void dcc(int fd, std::istringstream& msg);
-    void commandLog(const std::string& command, bool status);
+	void commandLog(const std::string& command, bool status);
 
 	bool isEmpty(std::istringstream &sstream);
 	void CloseFds(); //-> close file descriptors
