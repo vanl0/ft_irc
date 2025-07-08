@@ -61,8 +61,6 @@ void Server::parseInput(int fd, std::istringstream &strm_msg){
 	}
 }
 
-
-
 void Server::privmsg(int fd, std::istringstream& msg) {
     std::string restOfMsg;
     std::getline(msg, restOfMsg);
