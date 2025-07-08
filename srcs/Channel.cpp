@@ -1,6 +1,6 @@
 #include "Channel.hpp"
 
-Channel::Channel(const std::string &channelName) : name(channelName) {};
+Channel::Channel(const std::string &channelName) : name(channelName), topicRights(false) {};
 		
 std::string Channel::getName(void)
 {
@@ -48,4 +48,17 @@ void Channel::removeOperator(int fd)
 {
 	if (isOperator(fd))
 		this->operators.erase(fd);
+}
+
+
+std::string Channel::getTopic() const{
+	return this->topic;
+}
+void Channel::setTopic(const std::string &newTopic){
+	this->topic = newTopic;
+	//here send message to every member showing the new topic
+}
+
+bool Channel::getTopicRights() const{
+	return this->topicRights;
 }

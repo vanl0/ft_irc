@@ -21,7 +21,8 @@ SRCS_LS =	main.cpp\
 			login.cpp\
 			utils.cpp\
 			channelCmds.cpp\
-			privMsg.cpp
+			privMsg.cpp\
+			topic.cpp
 
 SRCS = $(addprefix $(SRCS_DIR), $(SRCS_LS))
 OBJS = $(addprefix $(OBJS_DIR),$(notdir $(SRCS_LS:.cpp=.o)))
