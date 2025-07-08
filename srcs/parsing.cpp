@@ -74,12 +74,6 @@ void Server::kick(int fd, std::istringstream& msg) {
     std::cout << "[KICK] fd: " << fd << " msg:" << restOfMsg << std::endl;
 }
 
-void Server::topic(int fd, std::istringstream& msg) {
-    std::string restOfMsg;
-    std::getline(msg, restOfMsg);
-    std::cout << "[TOPIC] fd: " << fd << " msg:" << restOfMsg << std::endl;
-}
-
 void Server::invite(int fd, std::istringstream& msg) {
     std::string restOfMsg;
     std::getline(msg, restOfMsg);
