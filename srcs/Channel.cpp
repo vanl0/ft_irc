@@ -33,6 +33,42 @@ void Channel::removeUser(int fd)
 
 }
 
+void Channel::sendToAll(const std::string &msg)
+{
+	std::set<int>::iterator it;
+	for (it = members.begin(); it != members.end(); ++it)
+	{
+		sendMsgFd(*it, "[" + getName() + "] ", MAG);
+		sendMsgFd(*it, msg + "\n");
+	}
+}
+
+/*
+If we want to display who sent the message (a user for example)
+*/
+void Channel::sendToAll(const std::string &src, const std::string &msg)
+{
+	std::set<int>::iterator it;
+	for (it = members.begin(); it != members.end(); ++it)
+	{
+		sendMsgFd(*it, "[" + getName() + "] ", MAG);
+		sendMsgFd(*it,  src + ": ", BLU);
+		sendMsgFd(*it, msg + "\n");
+	}
+}
+
+std::string Channel::getTopic() const{
+	return this->topic;
+}
+void Channel::setTopic(const std::string &newTopic){
+	this->topic = newTopic;
+	//here send message to every member showing the new topic
+}
+
+bool Channel::getTopicRights() const{
+	return this->topicRights;
+}
+
 bool Channel::isOperator(int fd) const
 {
 	return (this->operators.find(fd) != this->operators.end());
@@ -48,17 +84,4 @@ void Channel::removeOperator(int fd)
 {
 	if (isOperator(fd))
 		this->operators.erase(fd);
-}
-
-
-std::string Channel::getTopic() const{
-	return this->topic;
-}
-void Channel::setTopic(const std::string &newTopic){
-	this->topic = newTopic;
-	//here send message to every member showing the new topic
-}
-
-bool Channel::getTopicRights() const{
-	return this->topicRights;
 }

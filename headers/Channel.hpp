@@ -17,15 +17,17 @@ class Channel
 		Channel(const std::string &channelName);
 		
 		std::string getName(void);
-		
-		std::string getTopic(void) const;
-		void		setTopic(std::string const &topic);
-		bool		getTopicRights(void) const;
 
 		bool isInChannel(int fd) const;
 		void addUser(int fd);
 		void removeUser(int fd);
 		
+		void sendToAll(const std::string &msg);
+		void sendToAll(const std::string &src, const std::string &msg);
+
+		std::string getTopic(void) const;
+		void		setTopic(std::string const &topic);
+		bool		getTopicRights(void) const;
 
 		bool isOperator(int fd) const;
 		void addOperator(int fd);

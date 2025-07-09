@@ -23,7 +23,6 @@ void Client::clientLog(const std::string &msg, const char *color) const {
 	sendMsgFd(this->Fd, msg, color);
 }
 
-
 void Client::setUser(const std::string &userName, const std::string &hostName, const std::string &serverName, const std::string &realName){
 	this->user[0] = userName;
 	this->user[1] = hostName;

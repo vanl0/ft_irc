@@ -25,10 +25,11 @@ void Server::SignalHandler(int signum)
 
 void	Server::CloseFds()
 {
-	for (size_t i = 0; i < clients.size(); i++)
+	std::map<int, Client>::iterator it;
+	for (it = clients.begin(); it != clients.end(); ++it)
 	{ //-> close all the clients
-		std::cout << RED << "Client <" << clients[i].GetFd() << "> Disconnected" << WHI << std::endl;
-		close(clients[i].GetFd());
+		std::cout << RED << "Client <" << it->first << "> Disconnected" << WHI << std::endl;
+		close(it->first);
 	}
 	if (SerSocketFd != -1)
 	{ //-> close the server socket
@@ -47,8 +48,9 @@ void Server::ReceiveNewData(int fd)
 	std::string completeMsg = clients[fd].appendPartial(buff);
 	if (bytes <= 0 || completeMsg.empty())
 	{
-		std::cout << RED << "Client <" << clients[fd].getNick() << "> Disconnected" << WHI << std::endl;
-		nickFd.erase(clients[fd].getNick());
+		if (clients[fd].getStatus() > 1)
+			nickFd.erase(clients[fd].getNick());
+		std::cout << RED << "Client <" << fd << "> Disconnected" << WHI << std::endl;
 		ClearClients(fd); //-> clear the client
 		close(fd); //-> close the client socket
 	}
@@ -96,7 +98,8 @@ void Server::AcceptNewClient()
 	clients[incofd] = cli; //-> add the client to the map of clients
 	fds.push_back(NewPoll); //-> add the client socket to the pollfd
 
-	cli.clientLog("Welcome to ircserv, provide a valid password using PASS <password>\n");
+	cli.clientLog("Welcome to ircserv.\n", BLU);
+	cli.printLoginStatus();
 	std::cout << GRE << "Client <" << incofd << "> Connected" << WHI << std::endl;
 }
 
@@ -182,13 +185,4 @@ void Server::ServerInit(int port, const std::string &pass)
 		}
 	}
 	CloseFds(); //-> close the file descriptors when the server stops
-}
-
-bool Server::isEmpty(std::istringstream &sstream){
-	std::string rest;
-
-	sstream >> rest;
-	if (rest.empty())
-		return true;
-	return false;
 }

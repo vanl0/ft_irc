@@ -8,6 +8,7 @@
 # include "Server.hpp"
 # include <iostream>
 # include <cstdlib>
+# include <map>
 # include <vector> //-> for vector
 # include <sys/socket.h> //-> for socket()
 # include <sys/types.h> //-> for socket()
@@ -17,9 +18,6 @@
 # include <arpa/inet.h> //-> for inet_ntoa()
 # include <poll.h> //-> for poll()
 # include <csignal> //-> for signal()
-# include <cstring>
-# include <map>
-# include <sstream>
 
 enum CommandType {
 	PASS,
@@ -59,6 +57,7 @@ public:
 	void user(int fd, std::istringstream& msg);
 	void nick(int fd, std::istringstream& msg);
 	void privmsg(int fd, std::istringstream& msg);
+	void privmsg(int fd, std::string& msg, std::string& chName);
 	void join(int fd, std::istringstream& msg);
 	void kick(int fd, std::istringstream& msg);
 	void topic(int fd, std::istringstream& msg);
@@ -70,7 +69,9 @@ public:
 
 	bool validNick(std::string const &nick);
 	bool nickInUse(const std::string &nick);
-	bool isEmpty(std::istringstream &sstream);
+
+	bool isValidChannelName(const std::string &name);
+
 	void CloseFds(); //-> close file descriptors
 	void ClearClients(int fd); //-> clear clients
 };

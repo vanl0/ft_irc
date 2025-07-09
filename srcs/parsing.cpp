@@ -14,7 +14,7 @@ void Server::parseInput(int fd, std::istringstream &strm_msg){
 			break;
 	}
 	if (i > 2 && clients[fd].getStatus() < 3){
-		clients[fd].clientLog("You need to be registered first!\n");
+		clients[fd].clientLog("You need to be registered first!\n", RED);
 		clients[fd].printLoginStatus();
 		return;
 	}

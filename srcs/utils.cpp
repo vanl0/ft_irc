@@ -29,3 +29,12 @@ void sendMsgFd(int fd, const std::string &msg, const char *color)
 	std::string coloredMsg = std::string(color) + msg + "\e[0m";
 	send(fd, coloredMsg.c_str(), coloredMsg.length(), 0);
 }
+
+bool isEmpty(std::istringstream &sstream)
+{	std::string rest;
+
+	sstream >> rest;
+	if (rest.empty())
+		return true;
+	return false;
+}
