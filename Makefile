@@ -20,7 +20,7 @@ SRCS_LS =	main.cpp\
 			parsing.cpp\
 			login.cpp\
 			utils.cpp\
-			channelCmds.cpp\
+			join.cpp\
 			privMsg.cpp\
 			topic.cpp
 

@@ -4,7 +4,7 @@
 https://datatracker.ietf.org/doc/html/rfc2812?utm_source=chatgpt.com#section-1.3
 Channels names are strings (beginning with a '&', '#', '+' or '!')
 of length up to 50 characters. It SHALL NOT contain
-any spaces (' '), a control G (^G or ASCII 7), a comma (',').
+any spaces (' '), a control G (\a or ASCII 7), a comma (',').
 */
 bool Server::isValidChannelName(const std::string &name)
 {
@@ -24,8 +24,7 @@ void Server::join(int fd, std::istringstream& msg)
 
 	if (!isValidChannelName(channelName))
 	{
-		sendMsgFd(fd, "Invalid channel name!\n", RED);
-		sendMsgFd(fd, "Channel names start with '#', '&', '+' or '!' (max length 50)\n", RED);
+		sendMsgFd(fd, "Bad syntax: Channel names start with '#', '&', '+' or '!' (max length 50)\n", RED);
 		return ;
 	}
 	std::map<std::string, Channel>::iterator it = channels.find(channelName);

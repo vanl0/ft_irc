@@ -1,6 +1,6 @@
 #include "Channel.hpp"
 
-Channel::Channel(const std::string &channelName) : name(channelName),  topic("No topic is set.\n"), topicRights(false) {};
+Channel::Channel(const std::string &channelName) : name(channelName),  topic("No topic is set."), topicRights(false) {};
 		
 std::string Channel::getName(void)
 {
@@ -44,7 +44,8 @@ void Channel::sendToAll(const std::string &msg)
 }
 
 /*
-If we want to display who sent the message (a user for example)
+If we want to display what is the source of the message
+example: user sends a message to the channel, topic change
 */
 void Channel::sendToAll(const std::string &src, const std::string &msg)
 {
@@ -62,7 +63,7 @@ std::string Channel::getTopic() const{
 }
 void Channel::setTopic(const std::string &newTopic){
 	this->topic = newTopic;
-	//here send message to every member showing the new topic
+	sendToAll("Topic has been set to", newTopic);
 }
 
 bool Channel::getTopicRights() const{
