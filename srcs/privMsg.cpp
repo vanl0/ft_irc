@@ -4,14 +4,16 @@ void Server::privmsg(int fd, std::istringstream& msg)
 {
 	std::string dest;
 	msg >> dest;
-
 	if (dest.empty() || msg.peek() == EOF)
 		return (sendMsgFd(fd, "Usage: PRIVMSG <#channel or user> :<message>\n", RED));
+
 	std::string content;
-	msg >> content;
-	if (content[0] != ':')
+	char c;
+	msg >> c;
+	if (c != ':')
 		return (sendMsgFd(fd, "You forgot to put the ':' before the message\n", RED));
-	content = content.substr(1); // skip the ':'
+
+	std::getline(msg, content);
 	if (content.empty())
 		return (sendMsgFd(fd, "Your message is empty...\n", RED));
 	if (dest[0] == '#')

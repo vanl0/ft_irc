@@ -3,7 +3,6 @@
 int main(int argc, char *argv[])
 {
 	Server ser;
-	std::cout << "---- SERVER ----" << std::endl;
 	try
 	{
 		validateInput(argc, argv);

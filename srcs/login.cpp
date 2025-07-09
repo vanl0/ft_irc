@@ -6,12 +6,12 @@ void Server::pass(int fd, std::istringstream& msg) {
 	if (clients[fd].getStatus() > 0){
 		clients[fd].clientLog("You've already put the correct password\n");
 		clients[fd].printLoginStatus();
-		return;
+		return ;
 	}
 	msg >> clientPass;
 	if (!isEmpty(msg)){
 		clients[fd].clientLog("Please provide only one password\n");
-		return;
+		return ;
 	}
 	if (clientPass == this->password){
 		clients[fd].clientLog("Password correct! ", GRE);
@@ -22,13 +22,40 @@ void Server::pass(int fd, std::istringstream& msg) {
 	}
 }
 
-bool Server::validNick(const std::string &nick){
-	std::map<int, Client>::const_iterator	it = clients.begin();
-	for(; it != clients.end(); it++){
-		if(it->second.getNick() == nick)
-			return false;
+// RFC 2812 https://www.rfc-editor.org/rfc/rfc2812.txt
+bool isValidNick(const std::string& nick) {
+    if (nick.empty() || nick.size() > 9)
+        return (false);
+
+    char first = nick[0];
+    if (!isalpha(first) &&
+        first != '[' && first != ']' && first != '\\' &&
+        first != '`' && first != '^' &&
+        first != '{' && first != '|' && first != '}')
+        return (false);
+
+    for (size_t i = 1; i < nick.size(); ++i) {
+        char c = nick[i];
+        if (!isalnum(c) &&
+            c != '-' &&
+            c != '[' && c != ']' && c != '\\' &&
+            c != '`' && c != '^' &&
+            c != '{' && c != '|' && c != '}')
+            return (false);
+    }
+
+    return (true);
+}
+
+bool Server::nickInUse(const std::string &nick)
+{
+	std::map<int, Client>::const_iterator	it;
+	for(it = clients.begin(); it != clients.end(); it++)
+	{
+		if (it->second.getNick() == nick)
+			return (false);
 	}
-	return true;
+	return (true);
 }
 
 void Server::nick(int fd, std::istringstream& msg) {
@@ -37,19 +64,21 @@ void Server::nick(int fd, std::istringstream& msg) {
 	if (clients[fd].getStatus() < 1){
 		clients[fd].clientLog("Missing password: ");
 		clients[fd].printLoginStatus();
-		return;
+		return ;
 	}
 	msg >> clientNick;
-	if (!isEmpty(msg) || clientNick.empty()){
-		clients[fd].clientLog("Wrong syntax: ");
+	if (!isEmpty(msg) || !isValidNick(clientNick)){
+		sendMsgFd(fd, "Wrong nickname syntax\n", RED);
 		clients[fd].printLoginStatus();
-		return;
+		return ;
 	}
-	if (!validNick(clientNick)){
-		clients[fd].clientLog("This nick is already in use\n", RED);
+	if (nickInUse(clientNick)){
+		clients[fd].clientLog("This nickname is already in use\n", RED);
 		clients[fd].printLoginStatus();
-		return;
+		return ;
 	} else {
+		if (clients[fd].getStatus() > 1) // if nick has been set, we remove it
+			nickFd.erase(clients[fd].getNick());
 		clients[fd].setNick(clientNick);
 		nickFd[clientNick] = fd; // added to quickly convert string (nick) to int (fd)
 		clients[fd].clientLog("Nickname set successfuly!\n", GRE);
