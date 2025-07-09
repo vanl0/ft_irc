@@ -22,40 +22,33 @@ void Server::pass(int fd, std::istringstream& msg) {
 	}
 }
 
-// RFC 2812 https://www.rfc-editor.org/rfc/rfc2812.txt
+/*
+RFC 1459: https://datatracker.ietf.org/doc/html/rfc1459#section-2.3.1
+<nick>= <letter> { <letter> | <number> | <special> }
+<special> = '-' | '[' | ']' | '\' | '`' | '^' | '{' | '}'
+*/
 bool isValidNick(const std::string& nick) {
-    if (nick.empty() || nick.size() > 9)
+    if (nick.empty() || nick.size() > 9 || !std::isalpha(nick[0]))
         return (false);
-
-    char first = nick[0];
-    if (!isalpha(first) &&
-        first != '[' && first != ']' && first != '\\' &&
-        first != '`' && first != '^' &&
-        first != '{' && first != '|' && first != '}')
-        return (false);
-
     for (size_t i = 1; i < nick.size(); ++i) {
         char c = nick[i];
-        if (!isalnum(c) &&
-            c != '-' &&
-            c != '[' && c != ']' && c != '\\' &&
-            c != '`' && c != '^' &&
-            c != '{' && c != '|' && c != '}')
+        if (!isalnum(c) && c != '-' && c != '['
+			&& c != ']' && c != '\\' && c != '`'
+			&& c != '^' && c != '{' && c != '}')
             return (false);
     }
-
     return (true);
 }
 
 bool Server::nickInUse(const std::string &nick)
 {
 	std::map<int, Client>::const_iterator	it;
-	for(it = clients.begin(); it != clients.end(); it++)
+	for (it = clients.begin(); it != clients.end(); it++)
 	{
 		if (it->second.getNick() == nick)
-			return (false);
+			return (true);
 	}
-	return (true);
+	return (false);
 }
 
 void Server::nick(int fd, std::istringstream& msg) {
