@@ -10,7 +10,7 @@ void Server::topic(int fd, std::istringstream &msg){
 
 	if (!isValidChannelName(channelName))
 	{
-		sendMsgFd(fd, "Bad syntax: Channel names start with '#', '&', '+' or '!' (max length 50)\n", RED);
+		sendMsgFd(fd, "Bad syntax: Channel names start with '#' (max length 50)\n", RED);
 		return ;
 	}
 	if (channels.find(channelName) == channels.end()){

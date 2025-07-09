@@ -24,7 +24,7 @@ void Server::privmsg(int fd, std::istringstream& msg)
 	std::getline(msg, content);
 	if (content.empty())
 		return (sendMsgFd(fd, "Your message is empty...\n", RED));
-	if (dest.find_first_of("&#+!") == 0)
+	if (dest[0] == '#')
 		return (privmsg(fd, content, dest));
 	if (nickFd.find(dest) == nickFd.end())
 		sendMsgFd(fd, "Can't send a message to a user that doesn't exist...\n", RED);
