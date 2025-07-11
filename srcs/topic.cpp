@@ -10,7 +10,7 @@ void Server::topic(int fd, std::istringstream &msg){
 
 	if (!isValidChannelName(channelName))
 	{
-		sendMsgFd(fd, "Bad syntax: Channel names start with '#' (max length 50)\n", RED);
+		client.clientLog("Bad syntax: Channel names start with '#' (max length 50)\n", RED);
 		return ;
 	}
 	if (channels.find(channelName) == channels.end()){
@@ -30,6 +30,8 @@ void Server::topic(int fd, std::istringstream &msg){
 			client.clientLog("You need to be an operator of [" + channelName + "] to change its topic\r\n", RED);
 		else{
 			it->second.setTopic(newTopic);
+			std::string topicMsg = "Topic set to: " + newTopic + "\r\n";
+			privmsg(fd, topicMsg, channelName);
 			client.clientLog("You have succesfully changed the topic of [" + channelName + "] to: ", GRE);
 			client.clientLog(newTopic + "\n");
 		}

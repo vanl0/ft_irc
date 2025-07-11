@@ -98,7 +98,6 @@ void Server::AcceptNewClient()
 	clients[incofd] = cli; //-> add the client to the map of clients
 	fds.push_back(NewPoll); //-> add the client socket to the pollfd
 
-	cli.clientLog("Welcome to ircserv.\n", BLU);
 	cli.printLoginStatus();
 	std::cout << GRE << "Client <" << incofd << "> Connected" << WHI << std::endl;
 }

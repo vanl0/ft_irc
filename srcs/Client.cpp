@@ -1,14 +1,23 @@
 #include "Client.hpp"
 
+Client::Client() : loginStatus(0), hexFlag(false)
+{}
+
 int Client::getStatus() const{
 	return this->loginStatus;
+}
+
+bool Client::getHexFlag() const
+{
+	return (hexFlag);
 }
 
 void Client::setNick(const std::string &nick){
 	this->nick = nick;
 }
+
 std::string Client::getNick() const{
-	return this->nick;
+	return (this->nick);
 }
 
 void Client::incrementStatus(){
@@ -20,8 +29,12 @@ void Client::clientLog(const std::string &msg) const{
 }
 
 void Client::clientLog(const std::string &msg, const char *color) const {
-	sendMsgFd(this->Fd, msg, color);
+	if (getHexFlag())
+		sendMsgFd(this->Fd, msg, ansiToIrc(color), RESET_HEX);
+	else
+		sendMsgFd(this->Fd, msg, color, RESET);
 }
+
 
 void Client::setUser(const std::string &userName, const std::string &hostName, const std::string &serverName, const std::string &realName){
 	this->user[0] = userName;
@@ -36,6 +49,12 @@ std::string Client::getUser(int i) const{
 	else
 		return NULL;
 }
+
+void Client::setHexFlag()
+{
+	hexFlag = !hexFlag;
+}
+
 
 std::string Client::readMessage(int const fd){
 	char	buffer[1024] = {0};
@@ -58,17 +77,16 @@ void Client::setPartial(const std::string &part){
 	_partialMsg = part;
 }
 
-
 void Client::printLoginStatus() const{
 	switch (loginStatus) {
 	case 0:
-		clientLog("Please provide a valid password using PASS <password>\n");
+		clientLog("Please provide a valid password using PASS <password>\r\n");
 		break;
 	case 1:
-		clientLog("Please provide a nickname using NICK <nickname>\n");
+		clientLog("Please provide a nickname using NICK <nickname>\r\n");
 		break;
 	case 2:
-		clientLog("Please provide a username using USER <username> <hostname(0)> <servername(*)> :<realname>\n");
+		clientLog("Please provide a username using USER <username> <hostname(0)> <servername(*)> :<realname>\r\n");
 		break;
 	default:
 		break;

@@ -21,9 +21,8 @@ class Channel
 		bool isInChannel(int fd) const;
 		void addUser(int fd);
 		void removeUser(int fd);
-		
-		void sendToAll(const std::string &msg);
-		void sendToAll(const std::string &src, const std::string &msg);
+
+		std::set<int> getMembers() const;
 
 		std::string getTopic(void) const;
 		void		setTopic(std::string const &topic);

@@ -23,15 +23,17 @@ private:
 	std::string IPadd;
 	std::string	messageBuffer;
 	int			loginStatus;
+	bool		hexFlag;
 
 	std::string	nick;
 	std::string user[4];
 
 	std::string _partialMsg;
 public:
-	Client(){loginStatus = 0;};
+	Client();
 	int GetFd(){return Fd;}
 	int getStatus(void) const;
+	bool getHexFlag() const;
 
 //---LOGIN---------------------------------------
 	void		setNick(std::string const &nick);
@@ -46,6 +48,7 @@ public:
 
 	void SetFd(int fd){Fd = fd;}
 	void setIpAdd(std::string ipadd){IPadd = ipadd;}
+	void setHexFlag();
 	void incrementStatus(void);
 	void clientLog(std::string const &msg) const;
 	void clientLog(std::string const &msg, const char* color) const;

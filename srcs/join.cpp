@@ -23,11 +23,11 @@ void Server::join(int fd, std::istringstream& msg)
 	msg >> channelName;
 
 	if (msg.peek() != EOF)
-		return (sendMsgFd(fd, "Bad syntax: Too many arguments\n", RED));
+		return (clients[fd].clientLog("Bad syntax: Too many arguments\n", RED));
 
 	if (!isValidChannelName(channelName))
 	{
-		sendMsgFd(fd, "Bad syntax: Channel names start with '#' (max length 50)\n", RED);
+		clients[fd].clientLog("Bad syntax: Channel names start with '#' (max length 50)\n", RED);
 		return ;
 	}
 	std::map<std::string, Channel>::iterator it = channels.find(channelName);
@@ -37,8 +37,8 @@ void Server::join(int fd, std::istringstream& msg)
 	if (!ch.isInChannel(fd))
 	{
 		ch.addUser(fd);
-		sendMsgFd(fd, "You joined the [" + ch.getName() + "] channel. Welcome!\n", GRE);
+		clients[fd].clientLog("You joined the [" + ch.getName() + "] channel. Welcome!\n", GRE);
 	}
 	else
-		sendMsgFd(fd, "You are already in the [" + ch.getName() + "] channel.\n", MAG);
+		clients[fd].clientLog("You are already in the [" + ch.getName() + "] channel.\n", MAG);
 }

@@ -9,6 +9,12 @@ void Server::parseInput(int fd, std::istringstream &strm_msg){
 	int len = sizeof(commands) / sizeof(commands[0]);
 	// if (command == "l")
 	// 	return log(fd, strm_msg);
+	if (command == "CAP")
+	{
+		clients[fd].clientLog("setting hex flag\n");
+		clients[fd].setHexFlag();
+		return ;
+	}
 	for (i = 0 ; i < len ; i++){
 		if (commands[i] == command)
 			break;

@@ -15,6 +15,7 @@ void Server::pass(int fd, std::istringstream& msg) {
 	}
 	if (clientPass == this->password){
 		clients[fd].clientLog("Password correct!\n", GRE);
+		clients[fd].clientLog("Welcome to ircserv.\n", BLU);
 		clients[fd].incrementStatus();
 		clients[fd].printLoginStatus();
 	} else {
@@ -62,7 +63,7 @@ void Server::nick(int fd, std::istringstream& msg) {
 	}
 	msg >> clientNick;
 	if (!isEmpty(msg) || !isValidNick(clientNick)){
-		sendMsgFd(fd, "Wrong nickname syntax. Must start with a letter (max length 9).\n", RED);
+		clients[fd].clientLog("Wrong nickname syntax. Must start with a letter (max length 9).\n", RED);
 		clients[fd].printLoginStatus();
 		return ;
 	}
