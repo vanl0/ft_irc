@@ -4,6 +4,7 @@ void Server::topic(int fd, std::istringstream &msg){
 	std::string channelName;
 	std::string newTopic;
 	Client		client = clients[fd];
+	status = FAIL;
 
 	msg >> channelName;
 	std::getline(msg >> std::ws, newTopic);
@@ -25,6 +26,7 @@ void Server::topic(int fd, std::istringstream &msg){
 	if (newTopic.empty()){
 		client.clientLog("[" + channelName + "]", MAG);
 		client.clientLog(" TOPIC: " + it->second.getTopic() + "\r\n");
+		status = SUCCESS;
 	} else {
 		if (!it->second.isOperator(fd) && !it->second.getTopicRights())
 			client.clientLog("You need to be an operator of [" + channelName + "] to change its topic\r\n", RED);
@@ -34,6 +36,7 @@ void Server::topic(int fd, std::istringstream &msg){
 			privmsg(fd, topicMsg, channelName);
 			client.clientLog("You have succesfully changed the topic of [" + channelName + "] to: ", GRE);
 			client.clientLog(newTopic + "\n");
+			status = SUCCESS;
 		}
 	}
 }

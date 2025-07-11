@@ -27,6 +27,12 @@ enum CommandType {
 	PRIVMSG
 };
 
+enum CommandReturn{
+	FAIL,
+	SUCCESS,
+	NOT_FOUND
+};
+
 class Server //-> class for server
 {
 private:
@@ -40,8 +46,10 @@ private:
 
 	std::map<std::string, Channel> channels; // map of <Channel name, Channel class> to quickly add channels
 	std::map<std::string, int>	nickFd; // map of <nickame, fd> to quickly search clients fd
+
+	int	status;
 public:
-	Server(): SerSocketFd(-1) {} //-> default constructor
+	Server(): SerSocketFd(-1), status(SUCCESS) {} //-> default constructor
 
 	void ServerInit(int port, const std::string &pass); //-> server initialization
 	void SerSocket(); //-> server socket creation
@@ -65,7 +73,7 @@ public:
 	void mode(int fd, std::istringstream& msg);
 	void bet(int fd, std::istringstream& msg);
 	void dcc(int fd, std::istringstream& msg);
-	void commandLog(const std::string& command, bool status);
+	void commandLog(const std::string& command, int status);
 
 	bool validNick(std::string const &nick);
 	bool nickInUse(const std::string &nick);

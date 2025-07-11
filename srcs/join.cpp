@@ -19,6 +19,7 @@ bool Server::isValidChannelName(const std::string &name)
 
 void Server::join(int fd, std::istringstream& msg)
 {
+	status = FAIL;
 	std::string channelName;
 	msg >> channelName;
 
@@ -38,6 +39,7 @@ void Server::join(int fd, std::istringstream& msg)
 	{
 		ch.addUser(fd);
 		clients[fd].clientLog("You joined the [" + ch.getName() + "] channel. Welcome!\n", GRE);
+		status = SUCCESS;
 	}
 	else
 		clients[fd].clientLog("You are already in the [" + ch.getName() + "] channel.\n", MAG);
