@@ -4,7 +4,7 @@
 void Server::parseInput(int fd, std::istringstream &strm_msg){
 	int i;
 	std::string command;
-	std::string commands[] = {"PASS", "USER", "NICK", "PRIVMSG", "JOIN", "KICK", "TOPIC", "INVITE", "MODE", "BET", "DCC", "PING"};
+	std::string commands[] = {"PASS", "USER", "NICK", "PRIVMSG", "JOIN", "KICK", "TOPIC", "INVITE", "MODE"};
 	strm_msg >> command;
 	int len = sizeof(commands) / sizeof(commands[0]);
 	// if (command == "l")
@@ -16,6 +16,10 @@ void Server::parseInput(int fd, std::istringstream &strm_msg){
 	if (i > 2 && clients[fd].getStatus() < 3){
 		clients[fd].clientLog("You need to be registered first!\n", RED);
 		clients[fd].printLoginStatus();
+		if (i < 9)
+			commandLog(command, FAIL);
+		else
+			commandLog(command, NOT_FOUND);
 		return;
 	}
 	switch (i)
@@ -47,19 +51,10 @@ void Server::parseInput(int fd, std::istringstream &strm_msg){
 		case (8):
 			mode(fd, strm_msg);
 			break;
-		case (9):
-			bet(fd, strm_msg);
-			break;
-		case (10):
-			dcc(fd, strm_msg);
-			break;
-		case (11):
-			commandLog("PING", true);
-			break;
 		default:
-			commandLog(command, false);
-			//clientLog(fd, "Bad input\n");
+			status = NOT_FOUND;
 	}
+	commandLog(command, status);
 }
 
 void Server::kick(int fd, std::istringstream& msg) {
@@ -80,18 +75,12 @@ void Server::mode(int fd, std::istringstream& msg) {
 	std::cout << "[MODE] fd: " << fd << " msg:" << restOfMsg << std::endl;
 }
 
-void Server::bet(int fd, std::istringstream& msg) {
-	std::string restOfMsg;
-	std::getline(msg, restOfMsg);
-	std::cout << "[BET] fd: " << fd << " msg:" << restOfMsg << std::endl;
-}
 
-void Server::dcc(int fd, std::istringstream& msg) {
-	std::string restOfMsg;
-	std::getline(msg, restOfMsg);
-	std::cout << "[DCC] fd: " << fd << " msg:" << restOfMsg << std::endl;
-}
-
-void Server::commandLog(const std::string& command, bool status) {
-	std::cout << "[LOG] Command: " << command << " Status: " << (status ? "OK" : "FAIL") << std::endl;
+void Server::commandLog(const std::string& command, int status) {
+	if (status == FAIL)
+		std::cout << RED << "[INFO]: Execution of '" << command << "' failed" << WHI << std::endl;
+	if (status == SUCCESS)
+		std::cout << GRE << "[INFO]: Execution of '" << command << "' succeeded" << WHI << std::endl;
+	if (status == NOT_FOUND)
+		std::cout << RED << "[ERROR] Command: '" << command << "' not found" << WHI << std::endl;
 }

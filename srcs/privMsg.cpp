@@ -10,6 +10,7 @@ void Server::privmsg(int fd, std::string& msg, std::string& chName)
 
 void Server::privmsg(int fd, std::istringstream& msg)
 {
+	status = FAIL;
 	std::string dest;
 	msg >> dest;
 	if (dest.empty() || msg.peek() == EOF)
@@ -33,5 +34,6 @@ void Server::privmsg(int fd, std::istringstream& msg)
 		sendMsgFd(nickFd[dest], clients[fd].getNick() + ": ", BLU);
 		sendMsgFd(nickFd[dest], content + "\n");
 		sendMsgFd(fd, "Message sent to user <" + dest + "> successfully\n", GRE);
+		status = SUCCESS;
 	}
 }

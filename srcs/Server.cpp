@@ -48,9 +48,11 @@ void Server::ReceiveNewData(int fd)
 	std::string completeMsg = clients[fd].appendPartial(buff);
 	if (bytes <= 0 || completeMsg.empty())
 	{
-		if (clients[fd].getStatus() > 1)
+		if (clients[fd].getStatus() > 1){
+			std::cout << RED << "Client <" << clients[fd].getNick() << "> Disconnected" << WHI << std::endl;
 			nickFd.erase(clients[fd].getNick());
-		std::cout << RED << "Client <" << fd << "> Disconnected" << WHI << std::endl;
+		} else
+			std::cout << RED << "Client <fd: " << fd << "> Disconnected" << WHI << std::endl;
 		ClearClients(fd); //-> clear the client
 		close(fd); //-> close the client socket
 	}
@@ -65,7 +67,7 @@ void Server::ReceiveNewData(int fd)
 			pos = completeMsg.find('\n');
 		}
 		clients[fd].setPartial(completeMsg);
-		std::cout << YEL << "Client <" << fd << "> Data: " << WHI << buff;
+		//std::cout << YEL << "Client <" << fd << "> Data: " << WHI << buff;
 	}
 }
 

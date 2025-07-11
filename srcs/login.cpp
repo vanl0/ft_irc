@@ -2,6 +2,7 @@
 
 void Server::pass(int fd, std::istringstream& msg) {
 	std::string	clientPass;
+	status = FAIL;
 
 	if (clients[fd].getStatus() > 0){
 		clients[fd].clientLog("You've already put the correct password.\n");
@@ -17,6 +18,7 @@ void Server::pass(int fd, std::istringstream& msg) {
 		clients[fd].clientLog("Password correct!\n", GRE);
 		clients[fd].incrementStatus();
 		clients[fd].printLoginStatus();
+		status = SUCCESS;
 	} else {
 		clients[fd].clientLog("Password incorrect!\n", RED);
 		clients[fd].printLoginStatus();
@@ -54,6 +56,7 @@ bool Server::nickInUse(const std::string &nick)
 
 void Server::nick(int fd, std::istringstream& msg) {
 	std::string clientNick;
+	status = FAIL;
 
 	if (clients[fd].getStatus() < 1){
 		clients[fd].clientLog("Missing password.\n", RED);
@@ -79,6 +82,7 @@ void Server::nick(int fd, std::istringstream& msg) {
 		if (clients[fd].getStatus() == 1)
 			clients[fd].incrementStatus();
 		clients[fd].printLoginStatus();
+		status = SUCCESS;
 	}
 }
 
@@ -87,6 +91,7 @@ void Server::user(int fd, std::istringstream& msg) {
 	std::string clientHostname;
 	std::string clientServername;
 	std::string	clientRealname;
+	status = SUCCESS;
 
 	if (clients[fd].getStatus() == 0){
 		clients[fd].clientLog("Missing password.\n", RED);
@@ -116,4 +121,5 @@ void Server::user(int fd, std::istringstream& msg) {
 	clients[fd].setUser(clientUser, clientHostname, clientServername, clientHostname);
 	clients[fd].incrementStatus();
 	clients[fd].clientLog("User set up succesfully, welcome!\n", GRE);
+	status = SUCCESS;
 }
