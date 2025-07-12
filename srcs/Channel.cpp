@@ -39,14 +39,14 @@ std::set<int> Channel::getMembers() const
 }
 
 std::string Channel::getTopic() const{
-	return this->topic;
+	return (this->topic);
 }
 void Channel::setTopic(const std::string &newTopic){
 	this->topic = newTopic;
 }
 
 bool Channel::getTopicRights() const{
-	return this->topicRights;
+	return (this->topicRights);
 }
 
 bool Channel::isOperator(int fd) const

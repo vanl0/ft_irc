@@ -78,8 +78,7 @@ public:
 	bool validNick(std::string const &nick);
 	bool nickInUse(const std::string &nick);
 
-	bool isValidChannelName(const std::string &name);
-
+	void removeFromChannels(int fd);
 	void CloseFds(); //-> close file descriptors
 	void ClearClients(int fd); //-> clear clients
 };

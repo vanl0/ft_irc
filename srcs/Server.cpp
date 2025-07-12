@@ -23,12 +23,20 @@ void Server::SignalHandler(int signum)
 	Server::Signal = true; //-> set the static boolean to true to stop the server
 }
 
+void Server::removeFromChannels(int fd)
+{
+	std::map<std::string, Channel>::iterator it;
+	for (it = channels.begin(); it != channels.end(); ++it)
+		it->second.removeUser(fd);
+}
+
 void	Server::CloseFds()
 {
 	std::map<int, Client>::iterator it;
 	for (it = clients.begin(); it != clients.end(); ++it)
 	{ //-> close all the clients
 		std::cout << RED << "Client <" << it->first << "> Disconnected" << WHI << std::endl;
+		removeFromChannels(it->first);
 		close(it->first);
 	}
 	if (SerSocketFd != -1)
@@ -50,6 +58,7 @@ void Server::ReceiveNewData(int fd)
 	{
 		if (clients[fd].getStatus() > 1){
 			std::cout << RED << "Client <" << clients[fd].getNick() << "> Disconnected" << WHI << std::endl;
+			removeFromChannels(fd);
 			nickFd.erase(clients[fd].getNick());
 		} else
 			std::cout << RED << "Client <fd: " << fd << "> Disconnected" << WHI << std::endl;

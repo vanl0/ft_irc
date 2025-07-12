@@ -11,16 +11,16 @@ void Server::topic(int fd, std::istringstream &msg){
 
 	if (!isValidChannelName(channelName))
 	{
-		client.clientLog("Bad syntax: Channel names start with '#' (max length 50)\n", RED);
+		client.clientLog("Bad syntax: Channel names start with '&', '#', '+' or '!' (max length 50)\r\n", RED);
 		return ;
 	}
 	if (channels.find(channelName) == channels.end()){
-		client.clientLog("Channel [" + channelName + "] doesn't exist. To create one use JOIN <channel>\n", RED);
+		client.clientLog("Channel [" + channelName + "] doesn't exist. To create one use JOIN <channel>\r\n", RED);
 		return;
 	}
 	std::map<std::string, Channel>::iterator it = channels.find(channelName);
 	if (!it->second.isInChannel(fd)){
-		client.clientLog("You don't belong to this channel, you can join using JOIN <channel> or getting invited\n", RED);
+		client.clientLog("You don't belong to this channel, you can join using JOIN <channel> or getting invited\r\n", RED);
 		return;
 	}
 	if (newTopic.empty()){
@@ -30,12 +30,15 @@ void Server::topic(int fd, std::istringstream &msg){
 	} else {
 		if (!it->second.isOperator(fd) && !it->second.getTopicRights())
 			client.clientLog("You need to be an operator of [" + channelName + "] to change its topic\r\n", RED);
+		else if (newTopic[0] != ':')
+			client.clientLog("You forgot to put the ':' before the new topic\r\n", RED);
 		else{
+			newTopic = newTopic.substr(1);
 			it->second.setTopic(newTopic);
-			std::string topicMsg = "Topic set to: " + newTopic + "\r\n";
+			std::string topicMsg = "Topic set to: " + newTopic;
 			privmsg(fd, topicMsg, channelName);
 			client.clientLog("You have succesfully changed the topic of [" + channelName + "] to: ", GRE);
-			client.clientLog(newTopic + "\n");
+			client.clientLog(newTopic + "\r\n");
 			status = SUCCESS;
 		}
 	}

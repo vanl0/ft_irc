@@ -29,10 +29,13 @@ private:
 	std::string user[4];
 
 	std::string _partialMsg;
+
+	timeval start;
 public:
 	Client();
 	int GetFd(){return Fd;}
 	int getStatus(void) const;
+	timeval getStart(void) const;
 	bool getHexFlag() const;
 
 //---LOGIN---------------------------------------

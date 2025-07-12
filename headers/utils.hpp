@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
+#include <sys/time.h>
 
 # define RED "\e[1;31m" //-> for red color
 # define GRE "\e[1;32m" //-> for green color
@@ -29,3 +30,7 @@ void sendMsgFd(int fd, const std::string &msg, const char *color, const char *re
 const char *ansiToIrc(const std::string &ansi);
 
 bool isEmpty(std::istringstream &sstream);
+bool isValidChannelName(const std::string &name);
+
+timeval getTime();
+double secondsBetween(struct timeval start, struct timeval end);

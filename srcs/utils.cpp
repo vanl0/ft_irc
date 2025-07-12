@@ -51,3 +51,32 @@ bool isEmpty(std::istringstream &sstream)
 		return true;
 	return false;
 }
+
+/*
+https://datatracker.ietf.org/doc/html/rfc2812?utm_source=chatgpt.com#section-1.3
+Channels names are strings (beginning with a '&', '#', '+' or '!') of up to 50 characters.
+They cannot contain any spaces (' '), a control G (\a), a comma (',').
+*/
+bool isValidChannelName(const std::string &name)
+{
+	std::cout << name << std::endl;
+	if (name.empty() || name.size() > 50)
+		return (false);
+	if (name.find_first_of("&#+!") != 0)
+		return (false);
+	if (name.find_first_of(" \a,") != std::string::npos)
+		return (false);
+	return (true);
+}
+
+timeval getTime()
+{
+    timeval tv;
+    gettimeofday(&tv, NULL);
+    return tv;
+}
+
+double secondsBetween(struct timeval start, struct timeval end)
+{
+    return (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1e6;
+}
