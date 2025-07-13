@@ -70,11 +70,7 @@ void Server::invite(int fd, std::istringstream& msg) {
 	std::cout << "[INVITE] fd: " << fd << " msg:" << restOfMsg << std::endl;
 }
 
-void Server::mode(int fd, std::istringstream& msg) {
-	std::string restOfMsg;
-	std::getline(msg, restOfMsg);
-	std::cout << "[MODE] fd: " << fd << " msg:" << restOfMsg << std::endl;
-}
+
 
 
 void Server::commandLog(const std::string& command, int status) {

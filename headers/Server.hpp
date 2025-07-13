@@ -71,8 +71,7 @@ public:
 	void topic(int fd, std::istringstream& msg);
 	void invite(int fd, std::istringstream& msg);
 	void mode(int fd, std::istringstream& msg);
-	void bet(int fd, std::istringstream& msg);
-	void dcc(int fd, std::istringstream& msg);
+	void parseMode(int fd, std::string const &flags, std::istringstream& msg, Channel *channel, bool sign);
 	void commandLog(const std::string& command, int status);
 
 	bool validNick(std::string const &nick);

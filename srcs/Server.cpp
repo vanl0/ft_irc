@@ -76,7 +76,7 @@ void Server::ReceiveNewData(int fd)
 			pos = completeMsg.find('\n');
 		}
 		clients[fd].setPartial(completeMsg);
-		//std::cout << YEL << "Client <" << fd << "> Data: " << WHI << buff;
+		std::cout << YEL << "Client <" << fd << "> Data: " << WHI << buff;
 	}
 }
 
