@@ -53,7 +53,7 @@ bool isEmpty(std::istringstream &sstream)
 }
 
 /*
-https://datatracker.ietf.org/doc/html/rfc2812?utm_source=chatgpt.com#section-1.3
+https://datatracker.ietf.org/doc/html/rfc2812?#section-1.3
 Channels names are strings (beginning with a '&', '#', '+' or '!') of up to 50 characters.
 They cannot contain any spaces (' '), a control G (\a), a comma (',').
 */
