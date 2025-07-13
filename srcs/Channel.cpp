@@ -33,41 +33,20 @@ void Channel::removeUser(int fd)
 
 }
 
-void Channel::sendToAll(const std::string &msg)
+std::set<int> Channel::getMembers() const
 {
-	std::set<int>::iterator it;
-	for (it = members.begin(); it != members.end(); ++it)
-	{
-		sendMsgFd(*it, "[" + getName() + "] ", MAG);
-		sendMsgFd(*it, msg + "\n");
-	}
-}
-
-/*
-If we want to display what is the source of the message
-example: user sends a message to the channel, topic change
-*/
-void Channel::sendToAll(const std::string &src, const std::string &msg)
-{
-	std::set<int>::iterator it;
-	for (it = members.begin(); it != members.end(); ++it)
-	{
-		sendMsgFd(*it, "[" + getName() + "] ", MAG);
-		sendMsgFd(*it,  src + ": ", BLU);
-		sendMsgFd(*it, msg + "\n");
-	}
+	return (members);
 }
 
 std::string Channel::getTopic() const{
-	return this->topic;
+	return (this->topic);
 }
 void Channel::setTopic(const std::string &newTopic){
 	this->topic = newTopic;
-	sendToAll("Topic has been set to", newTopic);
 }
 
 bool Channel::getTopicRights() const{
-	return this->topicRights;
+	return (this->topicRights);
 }
 
 bool Channel::isOperator(int fd) const

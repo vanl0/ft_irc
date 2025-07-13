@@ -9,12 +9,19 @@ void Server::parseInput(int fd, std::istringstream &strm_msg){
 	int len = sizeof(commands) / sizeof(commands[0]);
 	// if (command == "l")
 	// 	return log(fd, strm_msg);
+	if (command == "CAP")
+	{
+		timeval now = getTime();
+		double seconds = secondsBetween(clients[fd].getStart(), now);
+		if (seconds < 0.1)
+			return (clients[fd].setHexFlag());
+	}
 	for (i = 0 ; i < len ; i++){
 		if (commands[i] == command)
 			break;
 	}
 	if (i > 2 && clients[fd].getStatus() < 3){
-		clients[fd].clientLog("You need to be registered first!\n", RED);
+		clients[fd].clientLog("You need to be registered first!\r\n", RED);
 		clients[fd].printLoginStatus();
 		if (i < 9)
 			commandLog(command, FAIL);
@@ -55,12 +62,6 @@ void Server::parseInput(int fd, std::istringstream &strm_msg){
 			status = NOT_FOUND;
 	}
 	commandLog(command, status);
-}
-
-void Server::kick(int fd, std::istringstream& msg) {
-	std::string restOfMsg;
-	std::getline(msg, restOfMsg);
-	std::cout << "[KICK] fd: " << fd << " msg:" << restOfMsg << std::endl;
 }
 
 void Server::invite(int fd, std::istringstream& msg) {
