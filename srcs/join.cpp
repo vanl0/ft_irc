@@ -23,6 +23,9 @@ void Server::join(int fd, std::istringstream& msg)
 		ch.addUser(fd);
 		clients[fd].clientLog("You joined the [" + ch.getName() + "] channel. Welcome!\r\n", GRE);
 		status = SUCCESS;
+		/* clients[fd].clientLog(":" + clients[fd].getNick() + "!" + clients[fd].getUser(0) + "@localhost JOIN :" + channelName + "\r\n");
+		clients[fd].clientLog(":localhost 353 " + clients[fd].getNick() + " = " + channelName + " :@" + clients[fd].getNick() + "\r\n");
+		clients[fd].clientLog(":localhost 366 " + clients[fd].getNick() + " " + channelName + " :End of /NAMES list.\r\n"); */
 	}
 	else
 		clients[fd].clientLog("You are already in the [" + ch.getName() + "] channel.\r\n", MAG);

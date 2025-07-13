@@ -49,7 +49,7 @@ void Client::setUser(const std::string &userName, const std::string &hostName, c
 }
 
 std::string Client::getUser(int i) const{
-	if (i >= 0 && i <= 4)
+	if (i >= 0 && i <= 3)
 		return (this->user[i]);
 	else
 		return (NULL);

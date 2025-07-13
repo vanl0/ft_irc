@@ -32,7 +32,11 @@ class Channel
 		void addOperator(int fd);
 		void removeOperator(int fd);
 
-
+		void invite(int fd, bool plusminus);
+		void topicMode(int fd, bool plusminus, std::string &topic);
+		void keyMode(int fd, bool plusminus, std::string &key);
+		void operatorMode(int fd, bool plusminus, std::string &user);
+		void limitMode(int fd, bool plusminus, std::string &limit);
 };
 
 #endif
