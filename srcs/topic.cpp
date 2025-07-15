@@ -19,7 +19,7 @@ void Server::topic(int fd, std::istringstream &msg){
 		return;
 	}
 	std::map<std::string, Channel>::iterator it = channels.find(channelName);
-	if (!it->second.isInChannel(fd)){
+	if (!it->second.isInChannel(&clients[fd])){
 		client.clientLog("You don't belong to this channel, you can join using JOIN <channel> or getting invited\r\n", RED);
 		return;
 	}
@@ -28,7 +28,7 @@ void Server::topic(int fd, std::istringstream &msg){
 		client.clientLog(" TOPIC: " + it->second.getTopic() + "\r\n");
 		status = SUCCESS;
 	} else {
-		if (!it->second.isOperator(fd) && !it->second.getTopicRights())
+		if (!it->second.isOperator(&clients[fd]) && !it->second.getTopicRights())
 			client.clientLog("You need to be an operator of [" + channelName + "] to change its topic\r\n", RED);
 		else if (newTopic[0] != ':')
 			client.clientLog("You forgot to put the ':' before the new topic\r\n", RED);

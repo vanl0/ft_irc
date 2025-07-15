@@ -27,7 +27,7 @@ void Server::removeFromChannels(int fd)
 {
 	std::map<std::string, Channel>::iterator it;
 	for (it = channels.begin(); it != channels.end(); ++it)
-		it->second.removeUser(fd);
+		it->second.removeUser(&clients[fd]);
 }
 
 void	Server::CloseFds()

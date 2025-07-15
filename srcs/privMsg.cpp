@@ -5,15 +5,14 @@ void Server::privmsg(int fd, std::string& msg, std::string& chName)
 	if (!isValidChannelName(chName) || channels.find(chName) == channels.end())
 		return (clients[fd].clientLog("Can't send a message to a channel that doesn't exist...\r\n", RED));
 	std::string srcNick = clients[fd].getNick();
-	std::set<int> memberFds = channels.at(chName).getMembers();
-	std::set<int>::iterator it;
-	for (it = memberFds.begin(); it != memberFds.end(); ++it)
+	std::vector<Client *> members = channels.at(chName).getMembers();
+	std::vector<Client *>::iterator it;
+	for (it = members.begin(); it != members.end(); ++it)
 	{
-		clients[*it].clientLog("[" + chName + "] ", MAG);
-		clients[*it].clientLog(srcNick + ": ", BLU);
-		clients[*it].clientLog( msg + "\r\n");
+		(*it)->clientLog("[" + chName + "] ", MAG);
+		(*it)->clientLog(srcNick + ": ", BLU);
+		(*it)->clientLog(msg + "\r\n");
 	}
-	
 }
 
 void Server::privmsg(int fd, std::istringstream& msg)

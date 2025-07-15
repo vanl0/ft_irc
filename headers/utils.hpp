@@ -1,3 +1,6 @@
+
+#ifndef UTILS_HPP
+# define UTILS_HPP
 #include <sys/socket.h>
 #include <string>
 #include <iostream>
@@ -34,3 +37,7 @@ bool isValidChannelName(const std::string &name);
 
 timeval getTime();
 double secondsBetween(struct timeval start, struct timeval end);
+
+std::string skipStream(std::istringstream &iss);
+bool isNumber(std::string &str);
+#endif

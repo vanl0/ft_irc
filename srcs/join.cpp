@@ -18,9 +18,9 @@ void Server::join(int fd, std::istringstream& msg)
 	if (it == channels.end())
 		it = (channels.insert(std::make_pair(channelName, Channel(channelName)))).first;
 	Channel& ch = it->second;
-	if (!ch.isInChannel(fd))
+	if (!ch.isInChannel(&clients[fd]))
 	{
-		ch.addUser(fd);
+		ch.addUser(&clients[fd]);
 		clients[fd].clientLog("You joined the [" + ch.getName() + "] channel. Welcome!\r\n", GRE);
 		status = SUCCESS;
 		/* clients[fd].clientLog(":" + clients[fd].getNick() + "!" + clients[fd].getUser(0) + "@localhost JOIN :" + channelName + "\r\n");

@@ -80,3 +80,18 @@ double secondsBetween(struct timeval start, struct timeval end)
 {
     return (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1e6;
 }
+
+std::string	skipStream(std::istringstream &iss){
+	std::string next;
+	if (!(iss >> next))
+		return (std::string());
+	return (next);
+}
+
+bool	isNumber(std::string &str){
+	for (size_t i = 0; i < str.length(); i++){
+		if (!std::isdigit(str[i]))
+			return false;
+	}
+	return true;
+}

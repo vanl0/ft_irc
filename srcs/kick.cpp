@@ -29,16 +29,16 @@ void Server::kick(int fd, std::istringstream& msg) {
     if (channels.find(chName) == channels.end())
         return (clients[fd].clientLog("You can't kick someone from a nonexistent channel.\r\n", RED));
     Channel &ch = channels.at(chName);
-    if (!ch.isInChannel(fd))
+    if (!ch.isInChannel(&clients[fd]))
         return (clients[fd].clientLog("You can't kick someone from a channel you are not part of.\r\n", RED));
-    if (!ch.isOperator(fd))
+    if (!ch.isOperator(&clients[fd]))
         return (clients[fd].clientLog("This command can only be used by operators of the [" + chName + "] channel\r\n", RED));
     if (nickFd.find(name) == nickFd.end())
         return (clients[fd].clientLog("You can't kick a nonexistent user.\r\n", RED));
     int fdKicked = nickFd[name];
-    if (!ch.isInChannel(fdKicked))
+    if (!ch.isInChannel(&clients[fd]))
         return (clients[fd].clientLog(name + " is not part of the [" + chName + "] channel\r\n", RED));
-    ch.removeUser(fdKicked);
+    ch.removeUser(&clients[fd]);
     if (!reason.empty())
         reason = " (reason: " + reason + ")";
     std::string srcNick = clients[fd].getNick(); 
