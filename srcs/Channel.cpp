@@ -36,7 +36,7 @@ std::string Channel::getTopic() const{
 
 int	Channel::getLimit(void) const
 {
-	return (this->limit);
+	return (this->userLimit);
 }
 
 bool Channel::getInviteFlag(void) const
@@ -100,7 +100,7 @@ void Channel::setPassword(std::string const &pass)
 
 void Channel::setLimit(int newLimit)
 {
-	this->limit = newLimit;
+	this->userLimit = newLimit;
 }
 
 bool Channel::isInChannel(Client *client) const
@@ -164,3 +164,28 @@ void Channel::removeOperator(Client *client)
 		operators.erase(std::remove(operators.begin(), operators.end(), client), operators.end());
 }
 
+bool Channel::isInvited(const std::string &nick) const{
+	std::vector<std::string>::const_iterator it;
+	for (it = invitedUsers.begin(); it != invitedUsers.end(); it++){
+		if (nick == *it)
+			return true;
+	}
+	return false;
+}
+
+void Channel::addInvited(const std::string &nick){
+	invitedUsers.push_back(nick);
+}
+
+void Channel::removeInvited(const std::string &nick){
+	if (isInvited(nick))
+		invitedUsers.erase(std::remove(invitedUsers.begin(), invitedUsers.end(), nick), invitedUsers.end());
+}
+
+bool Channel::isPassValid(const std::string &pass){
+	return (pass == password);
+}
+
+int Channel::canUserJoin() const{
+	return ((limitFlag && static_cast<int>(members.size()) < userLimit) || !limitFlag);
+}

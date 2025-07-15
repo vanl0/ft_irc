@@ -64,11 +64,11 @@ void Server::parseInput(int fd, std::istringstream &strm_msg){
 	commandLog(command, status);
 }
 
-void Server::invite(int fd, std::istringstream& msg) {
+/* void Server::invite(int fd, std::istringstream& msg) {
 	std::string restOfMsg;
 	std::getline(msg, restOfMsg);
 	std::cout << "[INVITE] fd: " << fd << " msg:" << restOfMsg << std::endl;
-}
+} */
 
 
 

@@ -83,13 +83,16 @@ void Channel::invite(Client *client, bool plusminus){
 void Channel::topicMode(Client *client, bool plusminus){
 	if (topicRights && plusminus)
 		return(client->clientLog("Topic restrictions already set\r\n", RED));
-	if (topicRights && !plusminus)
+	if (!topicRights && !plusminus)
 		return(client->clientLog("Topic restrictions already unset\r\n", RED));
 	setTopicRights(plusminus);
-	if (plusminus)
+	if (plusminus){
+		topicRights = true;
 		sendtoMembers(client, "restricted topic rights to operators only");
-	else
+	}else{
+		topicRights = false;
 		sendtoMembers(client, "cleared topic rights restrictions to all members");
+	}
 }
 
 void Channel::keyMode(Client *client, bool plusminus, std::string &key){
@@ -150,6 +153,7 @@ void Channel::limitMode(Client *client, bool plusminus, std::string &limit){
 		if (number <= 0 || number > USER_MAX)
 			return(client->clientLog("Please provide a valid user limit (between 1 and 100)\r\n", RED));
 		limitFlag = true;
-			sendtoMembers(client, "changed the user limit on [" + name + "] to " + limit);
+		userLimit = number;
+		sendtoMembers(client, "changed the user limit on [" + name + "] to " + limit);
 	}
 }
