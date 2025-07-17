@@ -3,6 +3,8 @@
 void Server::kick(int fd, std::istringstream& msg) {
 	status = FAIL;
 	std::string chName;
+    //std::string clientAddr;
+    //msg >> clientAddr;
 	msg >> chName;
 	if (chName.empty() || msg.peek() == EOF)
 		return (clients[fd].clientLog("Usage: KICK <channel> <name> (:<reason>)\r\n", RED));

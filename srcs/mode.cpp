@@ -50,7 +50,7 @@ void Server::parseMode(int fd, const std::string &flags, std::istringstream &msg
 	params = skipStream(msg);
 	for (size_t i = 1; i < flags.length(); i++){
 		if (flags[i] == 'i'){
-			channel->invite(&clients[fd], plusminus);
+			channel->inviteMode(&clients[fd], plusminus);
 		}
 		else if (flags[i] == 't'){
 			channel->topicMode(&clients[fd], plusminus);
@@ -72,7 +72,7 @@ void Server::parseMode(int fd, const std::string &flags, std::istringstream &msg
 	}
 }
 
-void Channel::invite(Client *client, bool plusminus){
+void Channel::inviteMode(Client *client, bool plusminus){
 	setInviteFlag(plusminus);
 	if (plusminus)
 		sendtoMembers(client, "changed channel mode to invite only");

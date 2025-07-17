@@ -20,13 +20,11 @@ void Channel::sendtoMembers(Client *client, const std::string &msg){
 	}
 }
 
-std::string Channel::getName(void)
-{
+std::string Channel::getName(void) const{
 	return (this->name);
 }
 
-std::vector<Client *> Channel::getMembers() const
-{
+std::vector<Client *> Channel::getMembers() const{
 	return (this->members);
 }
 
@@ -182,7 +180,7 @@ void Channel::removeInvited(const std::string &nick){
 		invitedUsers.erase(std::remove(invitedUsers.begin(), invitedUsers.end(), nick), invitedUsers.end());
 }
 
-bool Channel::isPassValid(const std::string &pass){
+bool Channel::isPassValid(const std::string &pass) const{
 	return (pass == password);
 }
 

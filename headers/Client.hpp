@@ -16,7 +16,7 @@
 
 class   Server;
 
-class Client //-> class for client
+class Client
 {
 private:
 	int 		Fd;
@@ -30,13 +30,13 @@ private:
 
 	std::string _partialMsg;
 
-	timeval start;
+	timeval 	start;
 public:
 	Client();
-	int GetFd(){return Fd;}
-	int getStatus(void) const;
-	timeval getStart(void) const;
-	bool getHexFlag() const;
+	int 		GetFd(){return Fd;}
+	int 		getStatus(void) const;
+	timeval		getStart(void) const;
+	bool 		getHexFlag() const;
 
 //---LOGIN---------------------------------------
 	void		setNick(std::string const &nick);
@@ -49,12 +49,12 @@ public:
 	std::string	appendPartial(char *buffer);
 	void		setPartial(std::string const &part);
 
-	void SetFd(int fd){Fd = fd;}
-	void setIpAdd(std::string ipadd){IPadd = ipadd;}
-	void setHexFlag();
-	void incrementStatus(void);
-	void clientLog(std::string const &msg) const;
-	void clientLog(std::string const &msg, const char* color) const;
+	void 		SetFd(int fd){Fd = fd;}
+	void 		setIpAdd(std::string ipadd){IPadd = ipadd;}
+	void 		setHexFlag();
+	void 		incrementStatus(void);
+	void 		clientLog(std::string const &msg) const;
+	void 		clientLog(std::string const &msg, const char* color) const;
 	std::string	readMessage();
 };
 

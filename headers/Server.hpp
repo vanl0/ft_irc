@@ -33,53 +33,53 @@ enum CommandReturn{
 	NOT_FOUND
 };
 
-class Server //-> class for server
+class Server
 {
 private:
-	std::string password;
-	int Port; //-> server port
-	int SerSocketFd; //-> server socket file descriptor
-	static bool Signal; //-> static boolean for signal
+	std::string						password;
+	int 							Port;
+	int 							SerSocketFd;
+	static bool						Signal;
 
-	std::map<int, Client> clients; //-> vector of clients
-	std::vector<struct pollfd> fds; //-> vector of pollfd
+	std::map<int, Client>			clients;
+	std::vector<struct pollfd>		fds;
 
-	std::map<std::string, Channel> channels; // map of <Channel name, Channel class> to quickly add channels
-	std::map<std::string, int>	nickFd; // map of <nickame, fd> to quickly search clients fd
+	std::map<std::string, Channel>	channels;
+	std::map<std::string, int>		nickFd;
 
 	int	status;
 public:
-	Server(): SerSocketFd(-1), status(SUCCESS) {} //-> default constructor
+	Server(): SerSocketFd(-1), status(SUCCESS) {}
 
-	void ServerInit(int port, const std::string &pass); //-> server initialization
-	void SerSocket(); //-> server socket creation
-	void AcceptNewClient(); //-> accept new client
-	void ReceiveNewData(int fd); //-> receive new data from a registered client
+	void		ServerInit(int port, const std::string &pass);
+	void		SerSocket(void);
+	void 		AcceptNewClient();
+	void 		ReceiveNewData(int fd);
 
-	void ServerCommand();
+	void 		ServerCommand();
 
-	static void SignalHandler(int signum); //-> signal handler
-	
-	void parseInput(int fd, std::istringstream &strmMsg);
-	void pass(int fd, std::istringstream& msg);
-	void user(int fd, std::istringstream& msg);
-	void nick(int fd, std::istringstream& msg);
-	void privmsg(int fd, std::istringstream& msg);
-	void privmsg(int fd, std::string& msg, std::string& chName);
-	void join(int fd, std::istringstream& msg);
-	void kick(int fd, std::istringstream& msg);
-	void topic(int fd, std::istringstream& msg);
-	void invite(int fd, std::istringstream& msg);
-	void mode(int fd, std::istringstream& msg);
-	void parseMode(int fd, const std::string &flags, std::istringstream &msg, Channel *channel, std::string &params, bool plusminus);
-	void commandLog(const std::string& command, int status);
+	static void	SignalHandler(int signum);
 
-	bool validNick(std::string const &nick);
-	bool nickInUse(const std::string &nick);
+	void 		parseInput(int fd, std::istringstream &strmMsg);
+	void 		pass(int fd, std::istringstream& msg);
+	void 		user(int fd, std::istringstream& msg);
+	void 		nick(int fd, std::istringstream& msg);
+	void 		privmsg(int fd, std::istringstream& msg);
+	void 		privmsg(int fd, std::string& msg, std::string& chName);
+	void 		join(int fd, std::istringstream& msg);
+	void 		kick(int fd, std::istringstream& msg);
+	void 		topic(int fd, std::istringstream& msg);
+	void 		invite(int fd, std::istringstream& msg);
+	void 		mode(int fd, std::istringstream& msg);
+	void 		parseMode(int fd, const std::string &flags, std::istringstream &msg, Channel *channel, std::string &params, bool plusminus);
+	void 		commandLog(const std::string& command, int status);
 
-	void removeFromChannels(int fd);
-	void CloseFds(); //-> close file descriptors
-	void ClearClients(int fd); //-> clear clients
+	bool 		validNick(std::string const &nick);
+	bool 		nickInUse(const std::string &nick);
+
+	void 		removeFromChannels(int fd);
+	void 		CloseFds();
+	void 		ClearClients(int fd);
 };
 
 #endif

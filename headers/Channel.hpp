@@ -20,16 +20,16 @@ class Channel
 		std::string 				password;
 		int 						userLimit;
 
-		bool					inviteFlag;
-		bool 					topicRights;
-		bool					keyFlag;
-		bool					operatorFlag;
-		bool					limitFlag;
+		bool						inviteFlag;
+		bool 						topicRights;
+		bool						keyFlag;
+		bool						operatorFlag;
+		bool						limitFlag;
 
 	public:
 		Channel(const std::string &channelName);
 		
-		std::string				getName(void);
+		std::string				getName(void) const;
 		std::vector<Client *>	getMembers(void) const;
 		std::string				getTopic(void) const;
 		int						getLimit(void) const;
@@ -48,11 +48,10 @@ class Channel
 		void					setOperatorFlag(bool flag);
 		void					setLimitFlag(bool flag);
 
-		bool					isPassValid(std::string const &pass);
-		
 		void					setTopic(std::string const &topic);
 		void					setPassword(std::string const &pass);
 		void					setLimit(int newLimit);
+		bool					isPassValid(std::string const &pass) const;
 
 		bool					isInChannel(Client *client) const;
 		bool					isInChannel(const std::string &nick) const;
@@ -68,13 +67,13 @@ class Channel
 		bool					isInvited(const std::string &nick) const;
 		void					addInvited(const std::string &nick);
 		void					removeInvited(const std::string &nick);
-	
-		void 					invite(Client *client, bool plusminus);
+//------MODE
+		void 					inviteMode(Client *client, bool plusminus);
 		void					topicMode(Client *client, bool plusminus);
 		void 					keyMode(Client *client, bool plusminus, std::string &key);
 		void 					operatorMode(Client *client, bool plusminus, std::string &user);
 		void 					limitMode(Client *client, bool plusminus, std::string &limit);
-
+//------MESSAGES
 		void					sendtoMembers(std::string const &msg, char const *color);
 		void 					sendtoMembers(Client *client, const std::string &msg);
 

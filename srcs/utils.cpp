@@ -76,6 +76,15 @@ timeval getTime()
     return tv;
 }
 
+std::string getTimeString() {
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+
+    std::ostringstream oss;
+    oss << tv.tv_sec; // usamos solo los segundos, ignoramos microsegundos
+    return oss.str();
+}
+
 double secondsBetween(struct timeval start, struct timeval end)
 {
     return (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1e6;
