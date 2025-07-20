@@ -32,11 +32,6 @@ std::string Channel::getTopic() const{
 	return (this->topic);
 }
 
-int	Channel::getLimit(void) const
-{
-	return (this->userLimit);
-}
-
 bool Channel::getInviteFlag(void) const
 {
 	return (this->inviteFlag);
@@ -50,11 +45,6 @@ bool Channel::getTopicRights() const
 bool Channel::getKeyFlag(void) const
 {
 	return (this->keyFlag);
-}
-
-bool Channel::getOperatorFlag(void) const
-{
-	return (this->operatorFlag);
 }
 
 bool Channel::getLimitFlag(void) const
@@ -72,35 +62,6 @@ void Channel::setTopicRights(bool flag)
 	this->topicRights = flag;
 }
 
-void Channel::setKeyFlag(bool flag)
-{
-	this->keyFlag = flag;
-}
-
-void Channel::setOperatorFlag(bool flag)
-{
-	this->operatorFlag = flag;
-}
-void Channel::setLimitFlag(bool flag)
-{
-	this->limitFlag = flag;
-}
-
-void Channel::setTopic(const std::string &newTopic)
-{
-	this->topic = newTopic;
-}
-
-void Channel::setPassword(std::string const &pass)
-{
-	this->password = pass;
-}
-
-void Channel::setLimit(int newLimit)
-{
-	this->userLimit = newLimit;
-}
-
 bool Channel::isInChannel(Client *client) const
 {
 	std::vector<Client *>::const_iterator it = std::find(members.begin(), members.end(), client);
@@ -113,7 +74,7 @@ bool Channel::isInChannel(const std::string &nick) const{
 		if ((*it)->getNick() == nick)
 			return (true);
 	}
-	return false;
+	return (false);
 }
 
 Client *Channel::getClient(const std::string &nick) const{
@@ -122,8 +83,9 @@ Client *Channel::getClient(const std::string &nick) const{
 		if ((*it)->getNick() == nick)
 			return (*it);
 	}
-	return NULL;
+	return (NULL);
 }
+
 void Channel::addUser(Client *client)
 {
 	if (!isInChannel(client))
@@ -166,9 +128,9 @@ bool Channel::isInvited(const std::string &nick) const{
 	std::vector<std::string>::const_iterator it;
 	for (it = invitedUsers.begin(); it != invitedUsers.end(); it++){
 		if (nick == *it)
-			return true;
+			return (true);
 	}
-	return false;
+	return (false);
 }
 
 void Channel::addInvited(const std::string &nick){

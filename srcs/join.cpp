@@ -39,7 +39,7 @@ void Server::join(int fd, std::istringstream& msg)
 		ch.addUser(&clients[fd]);
 		clients[fd].clientLog("You joined the [" + ch.getName() + "] channel. Welcome!\r\n", GRE);
 		
-		clients[fd].clientLog(":localhost 329 " + clients[fd].getNick() + " " + channelName + " " + getTimeString() + "\r\n");
+		// clients[fd].clientLog(":localhost 329 " + clients[fd].getNick() + " " + channelName + " " + getTimeString() + "\r\n");
 		status = SUCCESS;
 		/* clients[fd].clientLog(":" + clients[fd].getNick() + "!" + clients[fd].getUser(0) + "@localhost JOIN :" + channelName + "\r\n");
 		clients[fd].clientLog(":localhost 353 " + clients[fd].getNick() + " = " + channelName + " :@" + clients[fd].getNick() + "\r\n");

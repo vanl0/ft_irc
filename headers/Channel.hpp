@@ -32,25 +32,18 @@ class Channel
 		std::string				getName(void) const;
 		std::vector<Client *>	getMembers(void) const;
 		std::string				getTopic(void) const;
-		int						getLimit(void) const;
 
 		bool					getInviteFlag(void) const;
 		bool					getTopicRights(void) const;
 		bool					getKeyFlag(void) const;
-		bool					getOperatorFlag(void) const;
 		
 		bool					getLimitFlag(void) const;
 		int						canUserJoin(void) const;
 		
 		void					setInviteFlag(bool flag);
 		void					setTopicRights(bool flag);
-		void					setKeyFlag(bool flag);
-		void					setOperatorFlag(bool flag);
-		void					setLimitFlag(bool flag);
 
 		void					setTopic(std::string const &topic);
-		void					setPassword(std::string const &pass);
-		void					setLimit(int newLimit);
 		bool					isPassValid(std::string const &pass) const;
 
 		bool					isInChannel(Client *client) const;

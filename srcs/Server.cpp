@@ -1,5 +1,6 @@
 #include "Server.hpp"
 #include <algorithm>
+
 void Server::ClearClients(int fd)
 { //-> clear the clients
 	for (size_t i = 0; i < fds.size(); i++)
