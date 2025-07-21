@@ -43,7 +43,7 @@ class Channel
 		void					setInviteFlag(bool flag);
 		void					setTopicRights(bool flag);
 
-		void					setTopic(std::string const &topic);
+		void					setTopic(std::string const &newTopic);
 		bool					isPassValid(std::string const &pass) const;
 
 		bool					isInChannel(Client *client) const;

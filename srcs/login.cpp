@@ -121,6 +121,6 @@ void Server::user(int fd, std::istringstream& msg) {
 	clientRealname.erase(0, 1);
 	clients[fd].setUser(clientUser, clientHostname, clientServername, clientHostname);
 	clients[fd].incrementStatus();
-	clients[fd].clientLog("User set up succesfully, welcome!\r\n", GRE);
+	clients[fd].clientLog(":localhost 001 " + clients[fd].getNick() + " :User set up succesfully, welcome!\r\n");
 	status = SUCCESS;
 }

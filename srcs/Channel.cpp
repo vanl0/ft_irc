@@ -62,6 +62,11 @@ void Channel::setTopicRights(bool flag)
 	this->topicRights = flag;
 }
 
+void Channel::setTopic(std::string const &newTopic)
+{
+	this->topic = newTopic;
+}
+
 bool Channel::isInChannel(Client *client) const
 {
 	std::vector<Client *>::const_iterator it = std::find(members.begin(), members.end(), client);
