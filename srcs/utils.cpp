@@ -27,7 +27,7 @@ void sendMsgFd(int fd, const std::string &msg)
 void sendMsgFd(int fd, const std::string &msg, const char *color, const char *reset) 
 {
 	
-	std::string coloredMsg = std::string(color) + msg + std::string(reset);
+	std::string coloredMsg = color + msg + reset;
 	send(fd, coloredMsg.c_str(), coloredMsg.length(), 0);
 }
 
@@ -40,6 +40,7 @@ const char *ansiToIrc(const std::string &ansi)
 	if (ansi == MAG) return (MAG_HEX);
 	if (ansi == WHI) return (WHI_HEX);
 	if (ansi == RESET) return (RESET_HEX);
+	if (ansi == RESETEND) return (RESET_HEXEND);
 	return "";
 }
 
@@ -59,7 +60,7 @@ They cannot contain any spaces (' '), a control G (\a), a comma (',').
 */
 bool isValidChannelName(const std::string &name)
 {
-	std::cout << name << std::endl;
+	//std::cout << name << std::endl;
 	if (name.empty() || name.size() > 50)
 		return (false);
 	if (name.find_first_of("&#+!") != 0)

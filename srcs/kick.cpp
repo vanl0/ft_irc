@@ -38,16 +38,16 @@ void Server::kick(int fd, std::istringstream& msg) {
     if (nickFd.find(name) == nickFd.end())
         return (clients[fd].clientLog("You can't kick a nonexistent user.\r\n", RED));
     int fdKicked = nickFd[name];
-    if (!ch.isInChannel(&clients[fd]))
+    if (!ch.isInChannel(&clients[fdKicked]))
         return (clients[fd].clientLog(name + " is not part of the [" + chName + "] channel\r\n", RED));
-    ch.removeUser(&clients[fd]);
+    ch.removeUser(&clients[fdKicked]);
     if (!reason.empty())
         reason = " (reason: " + reason + ")";
     std::string srcNick = clients[fd].getNick(); 
     std::string channelMsg = name + " has been kicked out by " + srcNick + "." + reason;
-    privmsg(fd, channelMsg, chName);
-    clients[fdKicked].clientLog("You have been kicked out of ", RED);
-    clients[fdKicked].clientLog("[" + chName + "]", MAG);
+    ch.sendtoMembers(channelMsg, RED);
+    clients[fdKicked].clientLog("You have been kicked out of ", RED, true);
+    clients[fdKicked].clientLog("[" + chName + "]", MAG, true);
     clients[fdKicked].clientLog(" by " + srcNick + "." + reason + "\r\n", RED);
     status = SUCCESS;
 }

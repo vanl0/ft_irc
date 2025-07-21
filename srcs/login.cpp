@@ -5,18 +5,18 @@ void Server::pass(int fd, std::istringstream& msg) {
 	status = FAIL;
 
 	if (clients[fd].getStatus() > 0){
-		clients[fd].clientLog("You've already put the correct password.\r\n");
+		clients[fd].clientLog("You've already put the correct password.", RED);
 		clients[fd].printLoginStatus();
 		return ;
 	}
 	msg >> clientPass;
 	if (!isEmpty(msg)){
-		clients[fd].clientLog("Please provide only one password using PASS <password>\r\n", RED);
+		clients[fd].clientLog("Please provide only one password using PASS <password>", RED);
 		return ;
 	}
 	if (clientPass == this->password){
-		clients[fd].clientLog("Password correct!\r\n", GRE);
-		clients[fd].clientLog("Welcome to ircserv.\r\n", BLU);
+		clients[fd].clientLog("Password correct!", GRE);
+		clients[fd].clientLog("Welcome to ircserv.", BLU);
 		clients[fd].incrementStatus();
 		clients[fd].printLoginStatus();
 		status = SUCCESS;
@@ -121,6 +121,6 @@ void Server::user(int fd, std::istringstream& msg) {
 	clientRealname.erase(0, 1);
 	clients[fd].setUser(clientUser, clientHostname, clientServername, clientHostname);
 	clients[fd].incrementStatus();
-	clients[fd].clientLog(":localhost 001 " + clients[fd].getNick() + " :User set up succesfully, welcome!\r\n");
+	clients[fd].clientLog(clients[fd].getNick() + " :User set up succesfully, welcome!\r\n", GRE);
 	status = SUCCESS;
 }

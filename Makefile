@@ -1,6 +1,6 @@
 NAME = ircserv
 CXX = c++
-CXXFLAGS = -Wall -Wextra -Werror -std=c++98
+CXXFLAGS = -std=c++98
 INCLUDES = -I$(HEADERS_DIR)
 
 HEADERS_DIR = ./headers/

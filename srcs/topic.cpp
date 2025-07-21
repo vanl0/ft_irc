@@ -37,7 +37,7 @@ void Server::topic(int fd, std::istringstream &msg){
 			it->second.setTopic(newTopic);
 			std::string topicMsg = "Topic set to: " + newTopic;
 			privmsg(fd, topicMsg, channelName);
-			client.clientLog("You have succesfully changed the topic of [" + channelName + "] to: ", GRE);
+			client.clientLog("You have succesfully changed the topic of [" + channelName + "] to: ", GRE, true);
 			client.clientLog(newTopic + "\r\n");
 			status = SUCCESS;
 		}

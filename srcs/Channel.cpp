@@ -14,8 +14,8 @@ void Channel::sendtoMembers(const std::string &msg, const char *color){
 void Channel::sendtoMembers(Client *client, const std::string &msg){
 	std::vector<Client *>::iterator	it;
 	for (it = members.begin(); it != members.end(); it++){
-		(*it)->clientLog("[" + name + "] ", MAG);
-		(*it)->clientLog(client->getNick() + ": ", BLU);
+		(*it)->clientLog("[" + name + "] ", MAG, true);
+		(*it)->clientLog(client->getNick() + ": ", BLU, true);
 		(*it)->clientLog(msg + "\r\n", MAG);
 	}
 }
@@ -106,6 +106,11 @@ void Channel::removeUser(Client *client)
 	if (isInChannel(client))
 	{	
 		members.erase(std::remove(members.begin(), members.end(), client), members.end());
+		std::cout << "Client erased from members: ";
+		if (isInChannel(client))
+			std::cout << "true\n";
+		else
+			std::cout << "false\n";
 		if (isOperator(client))
 			removeOperator(client);
 	}

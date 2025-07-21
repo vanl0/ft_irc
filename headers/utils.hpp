@@ -15,6 +15,7 @@
 # define MAG		"\e[1;35m" // magenta
 # define WHI		"\e[0;37m" //-> for white color
 # define RESET		"\e[0m"
+# define RESETEND	"\e[0m\r\n"
 
 # define RED_HEX	"\x03""04" // Red
 # define GRE_HEX	"\x03""03" // Green
@@ -23,7 +24,8 @@
 # define MAG_HEX	"\x03""06" // Magenta (purple)
 # define WHI_HEX	"\x03""00" // White (default)
 # define BOLD_HEX	"\x02"     // Bold
-# define RESET_HEX	"\x0F"     // Reset formatting
+# define RESET_HEX	"\x0F"
+# define RESET_HEXEND	"\x0F\r\n"     // Reset formatting
 
 void		validateInput(int argc, char *argv[]);
 

@@ -30,16 +30,25 @@ void Client::incrementStatus(){
 }
 
 void Client::clientLog(const std::string &msg) const{
-	sendMsgFd(this->Fd, msg);
+	sendMsgFd(this->Fd, " " + msg);
+}
+
+void Client::clientLog(const std::string &msg, const char *color, bool partial) const {
+	
+	std::string n =  " " + msg;
+	if (getHexFlag())
+		sendMsgFd(this->Fd, n, ansiToIrc(color), RESET_HEX);
+	else
+		sendMsgFd(this->Fd, n, color, RESET);
 }
 
 void Client::clientLog(const std::string &msg, const char *color) const {
+	std::string n = std::string() + " " + msg;
 	if (getHexFlag())
-		sendMsgFd(this->Fd, msg, ansiToIrc(color), RESET_HEX);
+		sendMsgFd(this->Fd, n, ansiToIrc(color), RESET_HEXEND);
 	else
-		sendMsgFd(this->Fd, msg, color, RESET);
+		sendMsgFd(this->Fd, n, color, RESETEND);
 }
-
 
 void Client::setUser(const std::string &userName, const std::string &hostName, const std::string &serverName, const std::string &realName){
 	this->user[0] = userName;

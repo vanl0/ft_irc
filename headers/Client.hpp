@@ -55,6 +55,8 @@ public:
 	void 		incrementStatus(void);
 	void 		clientLog(std::string const &msg) const;
 	void 		clientLog(std::string const &msg, const char* color) const;
+	void		clientLog(const std::string &msg, const char *color, bool end) const;
+
 	std::string	readMessage();
 };
 

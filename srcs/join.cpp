@@ -24,8 +24,7 @@ void Server::join(int fd, std::istringstream& msg)
 //------INVITED
 		if (ch.getInviteFlag() && !ch.isInvited(clients[fd].getNick()))
 			return (clients[fd].clientLog("You need to be invited to join [" + channelName + "]\r\n", RED));
-		if (ch.isInvited(clients[fd].getNick()))
-			ch.removeInvited(clients[fd].getNick());
+		
 //------PASSWORD
 		if (ch.getKeyFlag()){
 			if (password.empty())
@@ -38,7 +37,8 @@ void Server::join(int fd, std::istringstream& msg)
 			return (clients[fd].clientLog("Channel [" + channelName + "] is currently full, try joining later\r\n", RED));
 		ch.addUser(&clients[fd]);
 		clients[fd].clientLog("You joined the [" + ch.getName() + "] channel. Welcome!\r\n", GRE);
-		
+		if (ch.isInvited(clients[fd].getNick()))
+			ch.removeInvited(clients[fd].getNick());
 		// clients[fd].clientLog(":localhost 329 " + clients[fd].getNick() + " " + channelName + " " + getTimeString() + "\r\n");
 		status = SUCCESS;
 		/* clients[fd].clientLog(":" + clients[fd].getNick() + "!" + clients[fd].getUser(0) + "@localhost JOIN :" + channelName + "\r\n");
