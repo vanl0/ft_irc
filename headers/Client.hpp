@@ -14,6 +14,7 @@
 # include <vector>
 # include <fcntl.h>
 
+const std::string SERV_NAME = "ircserv :";
 class   Server;
 
 class Client

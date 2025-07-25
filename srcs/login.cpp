@@ -1,9 +1,9 @@
 #include "Server.hpp"
 
+
 void Server::pass(int fd, std::istringstream& msg) {
 	std::string	clientPass;
 	status = FAIL;
-
 	if (clients[fd].getStatus() > 0){
 		clients[fd].clientLog("You've already put the correct password.", RED);
 		clients[fd].printLoginStatus();
@@ -21,7 +21,7 @@ void Server::pass(int fd, std::istringstream& msg) {
 		clients[fd].printLoginStatus();
 		status = SUCCESS;
 	} else {
-		clients[fd].clientLog("Password incorrect!\r\n", RED);
+		clients[fd].clientLog("Password incorrect!", RED);
 		clients[fd].printLoginStatus();
 	}
 }
@@ -60,18 +60,18 @@ void Server::nick(int fd, std::istringstream& msg) {
 	status = FAIL;
 
 	if (clients[fd].getStatus() < 1){
-		clients[fd].clientLog("Missing password.\r\n", RED);
+		clients[fd].clientLog("Missing password.", RED);
 		clients[fd].printLoginStatus();
 		return ;
 	}
 	msg >> clientNick;
 	if (!isEmpty(msg) || !isValidNick(clientNick)){
-		clients[fd].clientLog("Wrong nickname syntax. Must start with a letter (max length 9).\r\n", RED);
+		clients[fd].clientLog("Wrong nickname syntax. Must start with a letter (max length 9).", RED);
 		clients[fd].printLoginStatus();
 		return ;
 	}
 	if (nickInUse(clientNick)){
-		clients[fd].clientLog("This nickname is already in use.\r\n", RED);
+		clients[fd].clientLog("This nickname is already in use.", RED);
 		clients[fd].printLoginStatus();
 		return ;
 	} else {
@@ -79,7 +79,7 @@ void Server::nick(int fd, std::istringstream& msg) {
 			nickFd.erase(clients[fd].getNick());
 		clients[fd].setNick(clientNick);
 		nickFd[clientNick] = fd; // added to quickly convert string (nick) to int (fd)
-		clients[fd].clientLog("Nickname set successfully, hello " + clientNick + ".\r\n", GRE);
+		clients[fd].clientLog("Nickname set successfully, hello " + clientNick + ".", GRE);
 		if (clients[fd].getStatus() == 1)
 			clients[fd].incrementStatus();
 		clients[fd].printLoginStatus();
@@ -95,17 +95,17 @@ void Server::user(int fd, std::istringstream& msg) {
 	status = SUCCESS;
 
 	if (clients[fd].getStatus() == 0){
-		clients[fd].clientLog("Missing password.\r\n", RED);
+		clients[fd].clientLog("Missing password.", RED);
 		clients[fd].printLoginStatus();
 		return;
 	}
 	if (clients[fd].getStatus() == 1){
-		clients[fd].clientLog("Missing nickname.\r\n", RED);
+		clients[fd].clientLog("Missing nickname.", RED);
 		clients[fd].printLoginStatus();
 		return;
 	}
 	if (clients[fd].getStatus() > 2){
-		clients[fd].clientLog("Your user has already been set up! It cannot be changed\r\n", RED);
+		clients[fd].clientLog("Your user has already been set up! It cannot be changed", RED);
 		return;
 	}
 	msg >> clientUser >> clientHostname >> clientServername;
@@ -114,13 +114,13 @@ void Server::user(int fd, std::istringstream& msg) {
 		clientServername.empty() || clientRealname.empty() ||\
 		clientRealname[0] != ':')
 	{
-			clients[fd].clientLog("Wrong syntax.\r\n", RED);
+			clients[fd].clientLog("Wrong syntax.", RED);
 			clients[fd].printLoginStatus();
 			return;
 	}
 	clientRealname.erase(0, 1);
 	clients[fd].setUser(clientUser, clientHostname, clientServername, clientHostname);
 	clients[fd].incrementStatus();
-	clients[fd].clientLog(clients[fd].getNick() + " :User set up succesfully, welcome!\r\n", GRE);
+	clients[fd].clientLog("User set up succesfully, welcome!", GRE);
 	status = SUCCESS;
 }

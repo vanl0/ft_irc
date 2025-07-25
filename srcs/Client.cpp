@@ -35,7 +35,7 @@ void Client::clientLog(const std::string &msg) const{
 
 void Client::clientLog(const std::string &msg, const char *color, bool partial) const {
 	
-	std::string n =  " " + msg;
+	std::string n = std::string() + " " + msg;
 	if (getHexFlag())
 		sendMsgFd(this->Fd, n, ansiToIrc(color), RESET_HEX);
 	else
@@ -43,7 +43,7 @@ void Client::clientLog(const std::string &msg, const char *color, bool partial) 
 }
 
 void Client::clientLog(const std::string &msg, const char *color) const {
-	std::string n = std::string() + " " + msg;
+	std::string n = std::string() + " " + SERV_NAME + msg;
 	if (getHexFlag())
 		sendMsgFd(this->Fd, n, ansiToIrc(color), RESET_HEXEND);
 	else
@@ -93,13 +93,13 @@ void Client::setPartial(const std::string &part){
 void Client::printLoginStatus() const{
 	switch (loginStatus) {
 	case 0:
-		clientLog("Please provide a valid password using PASS <password>\r\n");
+		clientLog(SERV_NAME + "Please provide a valid password using PASS <password>\r\n");
 		break ;
 	case 1:
-		clientLog("Please provide a nickname using NICK <nickname>\r\n");
+		clientLog(SERV_NAME + "Please provide a nickname using NICK <nickname>\r\n");
 		break ;
 	case 2:
-		clientLog("Please provide a username using USER <username> <hostname(0)> <servername(*)> :<realname>\r\n");
+		clientLog(SERV_NAME + "Please provide a username using USER <username> <hostname(0)> <servername(*)> :<realname>\r\n");
 		break ;
 	default:
 		break ;

@@ -8,25 +8,25 @@ void Server::mode(int fd, std::istringstream &msg){
 
 	msg >> channelName;
 	if (channelName.empty() || channelName[0] != '#'){
-		clients[fd].clientLog("Please provide a valid channel name and its mode\r\n", RED);	
+		clients[fd].clientLog("Please provide a valid channel name and its mode", RED);	
 		return;
 	}
 	std::map<std::string, Channel>::iterator it = channels.find(channelName);
 	if (it == channels.end()){
-		clients[fd].clientLog("Channel doesn't exist\r\n", RED);	
+		clients[fd].clientLog("Channel doesn't exist", RED);	
 		return;
 	}
 	if (!it->second.isInChannel(&clients[fd])){
-		clients[fd].clientLog("You don't belong to this channel, you can join using JOIN <channel> or getting invited\n", RED);
+		clients[fd].clientLog("You don't belong to this channel, you can join using JOIN <channel> or getting invited", RED);
 		return;
 	}
 	if (!it->second.isOperator(&clients[fd])){
-		clients[fd].clientLog("This command can only be used by operators of the [" + channelName + "] channel\r\n", RED);
+		clients[fd].clientLog("This command can only be used by operators of the [" + channelName + "] channel", RED);
 		return;
 	}
 	msg >> flags;
 	if (flags.empty() || (flags[0] != '-' && flags[0] != '+') || flags.length() < 2){
-		clients[fd].clientLog("Please provide a valid mode using -/+<mode> (parameter)\r\n", RED);
+		clients[fd].clientLog("Please provide a valid mode using -/+<mode> (parameter)", RED);
 		return;
 	}
 	if (flags[0] == '-')
@@ -37,13 +37,13 @@ void Server::mode(int fd, std::istringstream &msg){
 	flags = params;
 	if (!flags.empty() && (flags[0] == '-' || flags[0] == '+')){
 		if (plusminus == false && flags[0] == '-')
-			return (clients[fd].clientLog("Invalid repeated flag (-)\r\n", RED));
+			return (clients[fd].clientLog("Invalid repeated flag (-)", RED));
 		if (plusminus == true && flags[0] == '+')
-			return (clients[fd].clientLog("Invalid repeated flag (+)\r\n", RED));
+			return (clients[fd].clientLog("Invalid repeated flag (+)", RED));
 		parseMode(fd, flags, msg, &it->second, params, !plusminus);
 	}
 	if (!params.empty())
-		return (clients[fd].clientLog("Extra arguments ignored\r\n", RED));
+		return (clients[fd].clientLog("Extra arguments ignored", RED));
 }
 
 void Server::parseMode(int fd, const std::string &flags, std::istringstream &msg, Channel *channel, std::string &params, bool plusminus){
@@ -67,7 +67,7 @@ void Server::parseMode(int fd, const std::string &flags, std::istringstream &msg
 			channel->limitMode(&clients[fd], plusminus, params);
 			params = skipStream(msg);
 		} else {
-			sendMsgFd(fd, std::string("Unrecognized mode: '") + flags[i] + "'\r\n", RED, WHI);
+			sendMsgFd(fd, std::string("Unrecognized mode: '") + flags[i] + "'", RED, WHI);
 		}
 	}
 }
@@ -82,9 +82,9 @@ void Channel::inviteMode(Client *client, bool plusminus){
 
 void Channel::topicMode(Client *client, bool plusminus){
 	if (topicRights && plusminus)
-		return(client->clientLog("Topic restrictions already set\r\n", RED));
+		return(client->clientLog("Topic restrictions already set", RED));
 	if (!topicRights && !plusminus)
-		return(client->clientLog("Topic restrictions already unset\r\n", RED));
+		return(client->clientLog("Topic restrictions already unset", RED));
 	setTopicRights(plusminus);
 	if (plusminus){
 		topicRights = true;
@@ -97,11 +97,11 @@ void Channel::topicMode(Client *client, bool plusminus){
 
 void Channel::keyMode(Client *client, bool plusminus, std::string &key){
 	if (key.empty())
-		return(client->clientLog("Please provide a valid key\r\n", RED));
+		return(client->clientLog("Please provide a valid key", RED));
 	if (!keyFlag && !plusminus)
-		return(client->clientLog("Cannot erase a password that's not set\r\n", RED));
+		return(client->clientLog("Cannot erase a password that's not set", RED));
 	if (keyFlag && password != key)
-		return(client->clientLog("Incorrect channel password, please provide a valid one\r\n", RED));
+		return(client->clientLog("Incorrect channel password, please provide a valid one", RED));
 	if (plusminus){
 		password = key;
 		if (keyFlag)
@@ -120,13 +120,13 @@ void Channel::keyMode(Client *client, bool plusminus, std::string &key){
 void Channel::operatorMode(Client *client, bool plusminus, std::string &user){
 	Client	*userClient;
 	if (user.empty())
-		return(client->clientLog("Please provide a valid user\r\n", RED));
+		return(client->clientLog("Please provide a valid user", RED));
 	if (!isInChannel(user))
-		return(client->clientLog("User: " + user + " is not a member of [" + name + "] please provide a valid user\r\n", RED));
+		return(client->clientLog("User: " + user + " is not a member of [" + name + "] please provide a valid user", RED));
 	userClient = getClient(user);
 	if (isOperator(userClient)){
 		if (plusminus)
-			return(client->clientLog("User: " + user + " is already an operator of [" + name + "]\r\n", RED));
+			return(client->clientLog("User: " + user + " is already an operator of [" + name + "]", RED));
 		removeOperator(userClient);
 		sendtoMembers(client, "<" + user + "> is no longer an operator of [" + name + "]");
 	} else {
@@ -134,7 +134,7 @@ void Channel::operatorMode(Client *client, bool plusminus, std::string &user){
 			addOperator(userClient);
 			sendtoMembers(client, "<" + user + "> is now an operator of [" + name + "]");
 		}else
-			client->clientLog("User: " + user + " is not an operator of [" + name + "]\r\n", RED);
+			client->clientLog("User: " + user + " is not an operator of [" + name + "]", RED);
 	}
 }
 
@@ -145,13 +145,13 @@ void Channel::limitMode(Client *client, bool plusminus, std::string &limit){
 			limitFlag = false;
 			sendtoMembers(client, "erased the user limit on [" + name + "]");
 		} else
-			client->clientLog("This channel has already no user limit\r\n", RED);
+			client->clientLog("This channel has already no user limit", RED);
 	} else {
 		if(limit.empty() || !isNumber(limit))
-			return(client->clientLog("Please provide a valid user limit (between 1 and 100)\r\n", RED));
+			return(client->clientLog("Please provide a valid user limit (between 1 and 100)", RED));
 		number = std::atoi(limit.c_str());
 		if (number <= 0 || number > USER_MAX)
-			return(client->clientLog("Please provide a valid user limit (between 1 and 100)\r\n", RED));
+			return(client->clientLog("Please provide a valid user limit (between 1 and 100)", RED));
 		limitFlag = true;
 		userLimit = number;
 		sendtoMembers(client, "changed the user limit on [" + name + "] to " + limit);

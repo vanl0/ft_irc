@@ -2,6 +2,7 @@
 
 int main(int argc, char *argv[])
 {
+	std::cout << "\033[2J\033[H"; 
 	Server ser;
 	try
 	{
