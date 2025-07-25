@@ -44,7 +44,7 @@ void Server::kick(int fd, std::istringstream& msg) {
     if (!reason.empty())
         reason = " (reason: " + reason + ")";
     std::string srcNick = clients[fd].getNick(); 
-    std::string channelMsg = name + " has been kicked out by " + srcNick + "." + reason;
+    std::string channelMsg = name + " has been kicked out of [" + chName + "] by " + srcNick + "." + reason;
     ch.sendtoMembers(channelMsg, RED);
     clients[fdKicked].clientLog("You have been kicked out of ", RED, true);
     clients[fdKicked].clientLog("[" + chName + "]", MAG, true);
