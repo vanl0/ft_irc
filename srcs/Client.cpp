@@ -3,6 +3,18 @@
 Client::Client() : loginStatus(0), hexFlag(false), start(getTime())
 {}
 
+int Client::GetFd() const{
+	return Fd;
+}
+
+void Client::SetFd(int fd){
+	Fd = fd;
+}
+
+void Client::setIpAdd(std::string ipadd){
+	IPadd = ipadd;
+}
+
 int Client::getStatus() const{
 	return (this->loginStatus);
 }
@@ -93,13 +105,13 @@ void Client::setPartial(const std::string &part){
 void Client::printLoginStatus() const{
 	switch (loginStatus) {
 	case 0:
-		clientLog(SERV_NAME + "Please provide a valid password using PASS <password>\r\n");
+		clientLog(std::string(SERV_NAME) + "Please provide a valid password using PASS <password>\r\n");
 		break ;
 	case 1:
-		clientLog(SERV_NAME + "Please provide a nickname using NICK <nickname>\r\n");
+		clientLog(std::string(SERV_NAME) + "Please provide a nickname using NICK <nickname>\r\n");
 		break ;
 	case 2:
-		clientLog(SERV_NAME + "Please provide a username using USER <username> <hostname(0)> <servername(*)> :<realname>\r\n");
+		clientLog(std::string(SERV_NAME) + "Please provide a username using USER <username> <hostname(0)> <servername(*)> :<realname>\r\n");
 		break ;
 	default:
 		break ;

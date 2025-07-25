@@ -70,7 +70,7 @@ private:
 
 	int	status;
 public:
-	Server(): SerSocketFd(-1), status(SUCCESS) {}
+	Server();
 
 	void		ServerInit(int port, const std::string &pass);
 	void		SerSocket(void);
@@ -95,7 +95,6 @@ public:
 	void 		parseMode(int fd, const std::string &flags, std::istringstream &msg, Channel *channel, std::string &params, bool plusminus);
 	void 		commandLog(const std::string& command, int status);
 
-	bool 		validNick(std::string const &nick);
 	bool 		nickInUse(const std::string &nick);
 
 	void 		removeFromChannels(int fd);

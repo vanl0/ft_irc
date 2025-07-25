@@ -14,7 +14,7 @@
 # include <vector>
 # include <fcntl.h>
 
-const std::string SERV_NAME = "ircserv :";
+# define SERV_NAME "ircserv :"
 class   Server;
 
 class Client
@@ -34,7 +34,7 @@ private:
 	timeval 	start;
 public:
 	Client();
-	int 		GetFd(){return Fd;}
+	int 		GetFd() const;
 	int 		getStatus(void) const;
 	timeval		getStart(void) const;
 	bool 		getHexFlag() const;
@@ -50,15 +50,13 @@ public:
 	std::string	appendPartial(char *buffer);
 	void		setPartial(std::string const &part);
 
-	void 		SetFd(int fd){Fd = fd;}
-	void 		setIpAdd(std::string ipadd){IPadd = ipadd;}
+	void 		SetFd(int fd);
+	void 		setIpAdd(std::string ipadd);
 	void 		setHexFlag();
 	void 		incrementStatus(void);
 	void 		clientLog(std::string const &msg) const;
 	void 		clientLog(std::string const &msg, const char* color) const;
 	void		clientLog(const std::string &msg, const char *color, bool end) const;
-
-	std::string	readMessage();
 };
 
 #endif

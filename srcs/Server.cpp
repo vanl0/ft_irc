@@ -1,6 +1,8 @@
 #include "Server.hpp"
 #include <algorithm>
 
+Server::Server() : SerSocketFd(-1), status(SUCCESS) {};
+
 void Server::ClearClients(int fd)
 {
 	for (size_t i = 0; i < fds.size(); i++)
