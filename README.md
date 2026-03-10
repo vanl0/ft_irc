@@ -1,7 +1,7 @@
 
 # ft_irc, creating an irc server
 
-<img src="./files/img1.png" width="100%" height="100%"/>
+<img src="./files/img.png" width="100%" height="100%"/>
 
 Creating and irc server using and an external irc client like HexChat or by simply using the nc command and the corresponding keywords to login into the irc protocol.
 You can start the server using `make` and `./ircserv <port> <password>` with the port number on which your IRC server will be listening for incoming IRC connections and the connection password that will be needed by any IRC client that tries to connect to the server.
